@@ -1,32 +1,5 @@
 [
     {
-        "camera": {
-            "upVector": [
-                0.0,
-                1.0,
-                0.0
-            ]
-        },
-        "tag": {
-            "name": "camera",
-            "isActive": true
-        },
-        "transform": {
-            "position": [
-                -4508.142578125,
-                13484.892578125,
-                -2535.538818359375
-            ],
-            "scale": 1.0,
-            "orientation": [
-                30.919910430908203,
-                -24.539440155029297,
-                0.09819000214338303
-            ],
-            "isActive": true
-        }
-    },
-    {
         "model": {
             "models": [
                 "sphereskybox.ply"
@@ -93,6 +66,14 @@
         }
     },
     {
+        "camera": {
+            "upVector": [
+                0.0,
+                1.0,
+                0.0
+            ],
+            "distance": 500.0
+        },
         "force": {
             "inverseMass": 0.10000000149011612,
             "restitution": 0.800000011920929,
@@ -137,7 +118,7 @@
             "isActive": true
         },
         "tag": {
-            "name": "car",
+            "name": "camera",
             "isActive": true
         },
         "transform": {
@@ -149,7 +130,7 @@
             "scale": 0.5,
             "orientation": [
                 0.0,
-                -0.0,
+                0.0,
                 0.0
             ],
             "isActive": true
@@ -352,9 +333,9 @@
                 1.0
             ],
             "direction": [
+                -0.0,
+                0.0,
                 1.0,
-                -0.0,
-                -0.0,
                 1.0
             ],
             "distanceOffset": 0.0,
@@ -409,9 +390,9 @@
             ],
             "scale": 0.0,
             "orientation": [
+                0.0,
                 -0.0,
-                -0.0,
-                -0.0
+                0.0
             ],
             "isActive": true
         }
@@ -425,9 +406,9 @@
                 1.0
             ],
             "direction": [
+                -0.0,
+                0.0,
                 1.0,
-                -0.0,
-                -0.0,
                 1.0
             ],
             "distanceOffset": 0.0,
@@ -482,9 +463,9 @@
             ],
             "scale": 0.0,
             "orientation": [
+                0.0,
                 -0.0,
-                -0.0,
-                -0.0
+                0.0
             ],
             "isActive": true
         }

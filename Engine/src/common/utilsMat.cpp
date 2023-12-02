@@ -340,9 +340,9 @@ namespace myutils
         vec3 rotationRadians = radians(rotation);
 
         vec3 direction;
-        direction.x = cos(rotationRadians.x) * cos(rotationRadians.y);
-        direction.y = sin(rotationRadians.y);
-        direction.z = sin(rotationRadians.x) * cos(rotationRadians.y);
+        direction.x = cos(rotationRadians.x) * sin(rotationRadians.y);
+        direction.y = sin(rotationRadians.x);
+        direction.z = cos(rotationRadians.y) * cos(rotationRadians.x);
 
         vec3 directionNormalized = normalize(direction);
 
@@ -370,7 +370,7 @@ namespace myutils
 
     glm::vec3 CalculateRotation(const glm::vec3& sourcePosition, const glm::vec3& targetPosition) 
     {
-        glm::mat4 viewMatrix = glm::lookAt(sourcePosition, targetPosition, UP_VECTOR);
+        glm::mat4 viewMatrix = glm::lookAt(sourcePosition, targetPosition, glm::vec3(UP_VECTOR));
 
         glm::quat rotationMatrix = glm::mat3(viewMatrix);
 

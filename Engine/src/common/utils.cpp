@@ -112,7 +112,14 @@ void myutils::WrapMinMax(int min, int max, int& numOut)
 
 void myutils::WrapMinMax(float min, float max, float& numOut)
 {
-    numOut = std::min(std::max(numOut, 0.0f), max - 1);
+    if (numOut < min)
+    {
+        numOut = max;
+    }
+    else if (numOut > max)
+    {
+        numOut = min;
+    }
 }
 
 glm::vec4 myutils::StringToVec4(const std::string& glmstr)

@@ -30,7 +30,7 @@ function onstart()
     mainCommandGroup:addCommand(moveGroup, true) 
     mainCommandGroup:addCommand(orientGroup, true) 
 
-    commands.DispatchCommands(mainCommandGroup)
+    -- commands.DispatchCommands(mainCommandGroup)
 end
 
 function update(deltatime)
