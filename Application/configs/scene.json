@@ -1,0 +1,401 @@
+[
+    {
+        "camera": {
+            "upVector": [
+                0.0,
+                1.0,
+                0.0
+            ]
+        },
+        "tag": {
+            "name": "camera",
+            "isActive": true
+        },
+        "transform": {
+            "position": [
+                33.36130142211914,
+                10416.4580078125,
+                -2320.34521484375
+            ],
+            "scale": 1.0,
+            "orientation": [
+                91.71881103515625,
+                -22.887269973754883,
+                0.09844999760389328
+            ],
+            "isActive": true
+        }
+    },
+    {
+        "model": {
+            "models": [
+                "sphereskybox.ply"
+            ],
+            "collisionName": "",
+            "material": "matcubetext",
+            "friendlyName": "sphere",
+            "parentTagName": "",
+            "isWireframe": false,
+            "doNotLight": false,
+            "useColorTexture": true,
+            "isActive": true
+        },
+        "tag": {
+            "name": "skybox",
+            "isActive": false
+        },
+        "transform": {
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 100000.0,
+            "orientation": [
+                0.0,
+                -0.0,
+                0.0
+            ],
+            "isActive": false
+        }
+    },
+    {
+        "model": {
+            "models": [
+                "hogwarts.ply"
+            ],
+            "collisionName": "",
+            "material": "",
+            "friendlyName": "",
+            "parentTagName": "",
+            "isWireframe": false,
+            "doNotLight": false,
+            "useColorTexture": false,
+            "isActive": true
+        },
+        "tag": {
+            "name": "hogwarts",
+            "isActive": true
+        },
+        "transform": {
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 1.0,
+            "orientation": [
+                0.0,
+                -0.0,
+                0.0
+            ],
+            "isActive": true
+        }
+    },
+    {
+        "model": {
+            "models": [
+                "car.ply"
+            ],
+            "collisionName": "",
+            "material": "matcar",
+            "friendlyName": "",
+            "parentTagName": "",
+            "isWireframe": false,
+            "doNotLight": false,
+            "useColorTexture": true,
+            "isActive": true
+        },
+        "tag": {
+            "name": "car",
+            "isActive": true
+        },
+        "transform": {
+            "position": [
+                0.0,
+                10000.0,
+                -1420.0
+            ],
+            "scale": 1.0,
+            "orientation": [
+                0.0,
+                -0.0,
+                0.0
+            ],
+            "isActive": true
+        }
+    },
+    {
+        "material": {
+            "materialName": "matcar",
+            "offsetMove": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "colorTextures": [
+                "textcar"
+            ],
+            "colorTexturesRatios": [
+                1.0,
+                0.0,
+                0.0
+            ],
+            "useHeightMap": false,
+            "heightMapTexture": "",
+            "heightScale": 0.0,
+            "useNormalTexture": false,
+            "normalTexture": "",
+            "useSpecularTexture": false,
+            "specularTexture": "",
+            "useDiscardTexture": false,
+            "discardTexture": "",
+            "useCubeTexture": false,
+            "cubeTexture": "",
+            "alphaValue": 1.0,
+            "isActive": true
+        },
+        "tag": {
+            "name": "matcar",
+            "isActive": true
+        }
+    },
+    {
+        "tag": {
+            "name": "textcar",
+            "isActive": true
+        },
+        "texture": {
+            "fileName": "car_basecolor.bmp",
+            "textureType": 0,
+            "vecTextures": [],
+            "isActive": true
+        }
+    },
+    {
+        "material": {
+            "materialName": "matcubetext",
+            "offsetMove": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "colorTextures": [],
+            "colorTexturesRatios": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "useHeightMap": false,
+            "heightMapTexture": "",
+            "heightScale": 3.0,
+            "useNormalTexture": false,
+            "normalTexture": "",
+            "useSpecularTexture": false,
+            "specularTexture": "",
+            "useDiscardTexture": false,
+            "discardTexture": "",
+            "useCubeTexture": true,
+            "cubeTexture": "textcube",
+            "alphaValue": 1.0,
+            "isActive": false
+        },
+        "tag": {
+            "name": "matcubetext",
+            "isActive": false
+        },
+        "transform": {
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 1.0,
+            "orientation": [
+                0.0,
+                -0.0,
+                0.0
+            ],
+            "isActive": false
+        }
+    },
+    {
+        "tag": {
+            "name": "textcube",
+            "isActive": false
+        },
+        "texture": {
+            "fileName": "textcube",
+            "textureType": 20,
+            "vecTextures": [
+                "cubetexture/TropicalSunnyDayLeft2048.bmp",
+                "cubetexture/TropicalSunnyDayRight2048.bmp",
+                "cubetexture/TropicalSunnyDayUp2048.bmp",
+                "cubetexture/TropicalSunnyDayDown2048.bmp",
+                "cubetexture/TropicalSunnyDayFront2048.bmp",
+                "cubetexture/TropicalSunnyDayBack2048.bmp"
+            ],
+            "isActive": false
+        },
+        "transform": {
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 1.0,
+            "orientation": [
+                0.0,
+                -0.0,
+                0.0
+            ],
+            "isActive": false
+        }
+    },
+    {
+        "light": {
+            "position": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "direction": [
+                1.0,
+                -0.0,
+                -0.0,
+                1.0
+            ],
+            "distanceOffset": 0.0,
+            "positionOffset": [
+                0.0,
+                0.0,
+                -0.0,
+                0.0
+            ],
+            "directionOffset": [
+                -2.0,
+                -1.0,
+                -0.5,
+                0.0
+            ],
+            "diffuse": [
+                0.8999999761581421,
+                0.8999999761581421,
+                0.8999999761581421,
+                1.0
+            ],
+            "specular": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "atten": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "params": [
+                2.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "status": true,
+            "isActive": true
+        },
+        "tag": {
+            "name": "directionallight",
+            "isActive": true
+        },
+        "transform": {
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 0.0,
+            "orientation": [
+                -0.0,
+                -0.0,
+                -0.0
+            ],
+            "isActive": true
+        }
+    },
+    {
+        "light": {
+            "position": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "direction": [
+                1.0,
+                -0.0,
+                -0.0,
+                1.0
+            ],
+            "distanceOffset": 0.0,
+            "positionOffset": [
+                0.0,
+                0.0,
+                -0.0,
+                0.0
+            ],
+            "directionOffset": [
+                0.0,
+                1.0,
+                0.5,
+                0.0
+            ],
+            "diffuse": [
+                0.5,
+                0.5,
+                0.5,
+                1.0
+            ],
+            "specular": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "atten": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "params": [
+                2.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "status": true,
+            "isActive": true
+        },
+        "tag": {
+            "name": "directionallight",
+            "isActive": true
+        },
+        "transform": {
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 0.0,
+            "orientation": [
+                -0.0,
+                -0.0,
+                -0.0
+            ],
+            "isActive": true
+        }
+    }
+]
