@@ -20,6 +20,11 @@ void ForceComponent::SetRestitution(float value)
     this->m_restitution = value;
 }
 
+void ForceComponent::SetDrag(float value)
+{
+    m_drag = value;
+}
+
 void ForceComponent::SetAcceleration(glm::vec3 value)
 {
     this->m_acceleration = value;
@@ -53,6 +58,11 @@ float ForceComponent::GetInverseMass()
 float ForceComponent::GetRestitution()
 {
     return this->m_restitution;
+}
+
+float ForceComponent::GetDrag()
+{
+    return m_drag;
 }
 
 glm::vec3 ForceComponent::GetAcceleration()
@@ -94,6 +104,7 @@ void ForceComponent::GetInfo(sComponentInfo& compInfoOut)
 
     this->AddCompParInfo("inverseMass", "float", this->GetInverseMass(), compInfoOut);
     this->AddCompParInfo("restitution", "float", this->GetRestitution(), compInfoOut);
+    this->AddCompParInfo("drag", "float", this->GetDrag(), compInfoOut);
     this->AddCompParInfo("acceleration", "vec3", this->GetAcceleration(), compInfoOut);
     this->AddCompParInfo("velocity", "vec3", this->GetVelocity(), compInfoOut);
     this->AddCompParInfo("centrifugalAcceleration", "vec3", this->GetCentrifugalAcceleration(), compInfoOut);
@@ -113,6 +124,9 @@ void ForceComponent::SetParameter(sParameterInfo& parameterIn)
     }
     else if (parameterIn.parameterName == "restitution") {
         this->SetRestitution(parameterIn.parameterFloatValue);
+    }
+    else if (parameterIn.parameterName == "drag") {
+        this->SetDrag(parameterIn.parameterFloatValue);
     }
     else if (parameterIn.parameterName == "acceleration") {
         this->SetAcceleration(parameterIn.parameterVec3Value);

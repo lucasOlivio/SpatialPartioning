@@ -276,7 +276,10 @@ void Physics::m_ApplyForce(ForceComponent* pForce, TransformComponent* pTransfor
 
 	// Calculate new velocity this frame based on 
 	// delta time, acceleration and current velocity
-	glm::vec3 velThisFrame = myutils::IncreaseVelocity(pForce->GetVelocity(), pForce->GetAcceleration(), (float)deltaTime);
+	glm::vec3 velThisFrame = myutils::IncreaseVelocity(pForce->GetVelocity(), 
+													   pForce->GetAcceleration(), 
+													   pForce->GetDrag(),
+													   (float)deltaTime);
 	pForce->SetVelocity(velThisFrame);
 	// New object position
 	glm::vec3 deltaPosition = velThisFrame * (float)deltaTime;
@@ -286,8 +289,9 @@ void Physics::m_ApplyForce(ForceComponent* pForce, TransformComponent* pTransfor
 	// Apply centrifugal forces
 	// Same principle with movement velocity but applying adjusts to rotation
 	glm::vec3 rotationVel = myutils::IncreaseVelocity(pForce->GetCentrifugalVelocity(),
-		pForce->GetCentrifugalAcceleration(),
-		(float)deltaTime);
+													  pForce->GetCentrifugalAcceleration(), 
+													   pForce->GetDrag(),
+													  (float)deltaTime);
 	pForce->SetCentrifugalVelocity(rotationVel);
 	// New object position
 	glm::vec3 deltaRotation = rotationVel * (float)deltaTime;

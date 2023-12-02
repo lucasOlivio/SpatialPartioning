@@ -2,7 +2,23 @@
 #include "scene/SceneView.h"
 #include "components.h"
 #include "common/Input.h"
+#include "common/utilsMat.h"
 #include <glm/vec3.hpp>
+
+int lua_GetFrontDirection(lua_State* L)
+{
+	std::string entityTag = lua_tostring(L, 1);
+
+	TransformComponent* pTransform = SceneView::Get()->GetComponentByTag<TransformComponent>(entityTag, "transform");
+
+	glm::vec3 direction = myutils::GetDirectionFromDegrees(pTransform->GetOrientation());
+
+	lua_pushnumber(L, direction.x);
+	lua_pushnumber(L, direction.y);
+	lua_pushnumber(L, direction.z);
+
+	return 3;
+}
 
 int lua_GetTransform(lua_State* L)
 {

@@ -254,9 +254,21 @@ glm::vec3 myutils::CalculateVector(glm::vec3 startXYZ, glm::vec3 endXYZ, float r
     return resultVec;
 }
 
-glm::vec3 myutils::IncreaseVelocity(glm::vec3 initialVelocity, glm::vec3 acceleration, float deltaTime)
+glm::vec3 myutils::IncreaseVelocity(glm::vec3 initialVelocity, glm::vec3 acceleration,
+                                    float drag, float deltaTime)
 {
-    return (acceleration * deltaTime) + initialVelocity;
+    glm::vec3 newVelocity = (acceleration * deltaTime) + initialVelocity;
+
+    if (glm::length(newVelocity) < 0.1)
+    {
+        return glm::vec3(0);
+    }
+
+    // Apply drag
+    glm::vec3 dragForce = -glm::normalize(newVelocity) * drag * deltaTime;
+    newVelocity += dragForce;
+
+    return newVelocity;
 }
 
 glm::vec3 myutils::CalculateVelocity(glm::vec3 startXYZ, glm::vec3 endXYZ,
