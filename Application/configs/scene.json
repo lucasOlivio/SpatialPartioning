@@ -13,15 +13,15 @@
         },
         "transform": {
             "position": [
-                -2627.129638671875,
-                12046.5703125,
-                1840.7159423828125
+                -4508.142578125,
+                13484.892578125,
+                -2535.538818359375
             ],
             "scale": 1.0,
             "orientation": [
-                29.069339752197266,
-                -32.18873977661133,
-                0.09837000072002411
+                30.919910430908203,
+                -24.539440155029297,
+                0.09819000214338303
             ],
             "isActive": true
         }
@@ -105,7 +105,7 @@
             "velocity": [
                 0.0,
                 0.0,
-                250.0
+                0.0
             ],
             "centrifugalAcceleration": [
                 0.0,
@@ -130,6 +130,10 @@
             "isWireframe": false,
             "doNotLight": false,
             "useColorTexture": true,
+            "isActive": true
+        },
+        "script": {
+            "scriptName": "car.lua",
             "isActive": true
         },
         "tag": {

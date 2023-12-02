@@ -127,14 +127,9 @@ void FollowObject::m_GenerateSubCommands()
     pMove->PreStart();
 
     // OrientTo command to face the target
-    OrientTo* pOrient = new OrientTo();
-
-    pOrient->Initialize(m_pTransform, m_pForce, true, m_lastTargetPosition, glm::vec3(m_maxRotationSpeed));
-    pOrient->PreStart();
 
     // Set motion commands
     pGroup->AddParallelCommand(pMove);
-    pGroup->AddParallelCommand(pOrient);
 
     // Set motion commands to list
     this->CommandGroup::AddSerialCommand(pGroup);

@@ -1,9 +1,8 @@
 local commands = require("assets.scripts.commands")
 
-local entity = -1
+local entity = ""
 
-function onstart(thisEntity)
-    entity = thisEntity
+function onstart()
     print("startn entity: " .. entity)
     
     -- Example usage:

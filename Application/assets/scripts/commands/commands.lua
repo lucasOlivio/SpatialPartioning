@@ -6,8 +6,8 @@ local Command = require("assets.scripts.commands.command")
 function MoveCommand(entity, location, time, easyIn, easyOut, stopAtEnd)
     easyIn    = easyIn or 0.2
     easyOut   = easyOut or 0.1
-    stopAtEnd =  (stopAtEnd ~= false) -- workaround to have stopatend default as true
-    return Command:new("MoveTo", {entity = entity, location = location, 
+    stopAtEnd = (stopAtEnd ~= false) -- workaround to have stopatend default as true
+    return Command:new("MoveTo", {entity = entity, endxyz = location, 
                                   time = time, easyIn = easyIn, easyOut = easyOut,
                                   stopAtEnd = stopAtEnd})
 end
@@ -15,21 +15,14 @@ end
 -- Rotate the entity to the referenced orientation in "time"
 -- easyIn and easyOut are optional, to set the proportion of the time that the obj will be accelerating/decelerating
 -- stopAtEnd also optional, should the object stop velocity and accelerating at end or keep going?
-function OrientCommand(entity, time, orientation, position, easyIn, easyOut, stopAtEnd)
+function OrientCommand(entity, orientation, time, easyIn, easyOut, stopAtEnd)
     easyIn    = easyIn or 0.2
     easyOut   = easyOut or 0.1
-    stopAtEnd =  (stopAtEnd ~= false) -- workaround to have stopatend default as true
+    stopAtEnd = (stopAtEnd ~= false) -- workaround to have stopatend default as true
 
-    local tableOrient = {entity = entity, time = time, easyIn = easyIn, easyOut = easyOut,
-                        stopAtEnd = stopAtEnd}
-
-    if orientation then 
-        tableOrient["orientation"] = orientation
-    else
-        tableOrient["position"] = position
-    end
-
-    return Command:new("OrientTo", tableOrient)
+    return Command:new("OrientTo", {entity = entity, endxyz = orientation, 
+                                    time = time, easyIn = easyIn, 
+                                    easyOut = easyOut, stopAtEnd = stopAtEnd})
 end
 
 -- Move the object trough a bezier curve defined by the list of control points 
