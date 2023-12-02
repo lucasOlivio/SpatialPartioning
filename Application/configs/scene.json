@@ -13,15 +13,15 @@
         },
         "transform": {
             "position": [
-                33.36130142211914,
-                10416.4580078125,
-                -2320.34521484375
+                80.43863677978516,
+                10170.2109375,
+                -2123.93701171875
             ],
             "scale": 1.0,
             "orientation": [
-                91.71881103515625,
-                -22.887269973754883,
-                0.09844999760389328
+                93.94416809082031,
+                -11.938190460205078,
+                0.0983399972319603
             ],
             "isActive": true
         }
@@ -50,7 +50,7 @@
                 0.0,
                 0.0
             ],
-            "scale": 100000.0,
+            "scale": 50000.0,
             "orientation": [
                 0.0,
                 -0.0,
@@ -65,12 +65,12 @@
                 "hogwarts.ply"
             ],
             "collisionName": "",
-            "material": "",
+            "material": "mathogwarts",
             "friendlyName": "",
             "parentTagName": "",
             "isWireframe": false,
             "doNotLight": false,
-            "useColorTexture": false,
+            "useColorTexture": true,
             "isActive": true
         },
         "tag": {
@@ -83,7 +83,7 @@
                 0.0,
                 0.0
             ],
-            "scale": 1.0,
+            "scale": 0.5,
             "orientation": [
                 0.0,
                 -0.0,
@@ -116,7 +116,7 @@
                 10000.0,
                 -1420.0
             ],
-            "scale": 1.0,
+            "scale": 0.5,
             "orientation": [
                 0.0,
                 -0.0,
@@ -162,6 +162,18 @@
     },
     {
         "tag": {
+            "name": "texthogwarts",
+            "isActive": true
+        },
+        "texture": {
+            "fileName": "hogwarts.bmp",
+            "textureType": 0,
+            "vecTextures": [],
+            "isActive": true
+        }
+    },
+    {
+        "tag": {
             "name": "textcar",
             "isActive": true
         },
@@ -170,6 +182,55 @@
             "textureType": 0,
             "vecTextures": [],
             "isActive": true
+        }
+    },
+    {
+        "material": {
+            "materialName": "mathogwarts",
+            "offsetMove": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "colorTextures": [
+                "texthogwarts"
+            ],
+            "colorTexturesRatios": [
+                1.0,
+                0.0,
+                0.0
+            ],
+            "useHeightMap": false,
+            "heightMapTexture": "",
+            "heightScale": 3.0,
+            "useNormalTexture": false,
+            "normalTexture": "",
+            "useSpecularTexture": false,
+            "specularTexture": "",
+            "useDiscardTexture": false,
+            "discardTexture": "",
+            "useCubeTexture": false,
+            "cubeTexture": "",
+            "alphaValue": 1.0,
+            "isActive": false
+        },
+        "tag": {
+            "name": "mathogwarts",
+            "isActive": false
+        },
+        "transform": {
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 1.0,
+            "orientation": [
+                0.0,
+                -0.0,
+                0.0
+            ],
+            "isActive": false
         }
     },
     {
