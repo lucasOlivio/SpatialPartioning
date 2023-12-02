@@ -21,7 +21,7 @@ void TransformComponent::SetOrientation(glm::vec3 value)
 	quat quatZ = angleAxis(radZ, Z_VECTOR);
 
 	// Combine quaternions
-	m_qOrientation = quatX * quatY;
+	m_qOrientation = quatX * quatY * quatZ;
 }
 
 void TransformComponent::SetOrientation(glm::quat value)
