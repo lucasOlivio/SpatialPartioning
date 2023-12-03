@@ -16,12 +16,10 @@ void TransformComponent::SetOrientation(glm::vec3 value)
 	float radY = radians(value.y);
 	float radZ = radians(value.z);
 
-	quat quatX = angleAxis(radX, X_VECTOR);
-	quat quatY = angleAxis(radY, Y_VECTOR);
-	quat quatZ = angleAxis(radZ, Z_VECTOR);
+	vec3 eulerAngles(radX, radY, radZ);
 
 	// Combine quaternions
-	m_qOrientation = quatX * quatY * quatZ;
+	m_qOrientation = quat(eulerAngles);
 }
 
 void TransformComponent::SetOrientation(glm::quat value)
@@ -125,10 +123,10 @@ glm::vec3 TransformComponent::GetOrientation()
 {
 	using namespace glm;
 
+
 	// Extract rotation angles in radians
 	vec3 rotationRadians = eulerAngles(m_qOrientation);
 
-	// Convert rotation angles to degrees
 	vec3 rotationDegrees = degrees(rotationRadians);
 
 	return rotationDegrees;
@@ -206,12 +204,10 @@ glm::mat4 TransformComponent::GetTransformNoScale()
 
 void TransformComponent::GetInfo(sComponentInfo& compInfoOut)
 {
-	using namespace myutils;
-
 	compInfoOut.componentName = "transform";
 	compInfoOut.componentParameters.clear();
 
-	AddCompParInfo("position", "vec3", m_initialPosition, compInfoOut);
+	AddCompParInfo("position", "vec3", GetPosition(), compInfoOut);
 	AddCompParInfo("scale", "float", GetScale(), compInfoOut);
 	AddCompParInfo("orientation", "vec3", GetOrientation(), compInfoOut);
 
@@ -220,8 +216,6 @@ void TransformComponent::GetInfo(sComponentInfo& compInfoOut)
 
 void TransformComponent::SetParameter(sParameterInfo& parameterIn)
 {
-	using namespace myutils;
-
 	Component::SetParameter(parameterIn);
 
 	if (parameterIn.parameterName == "position") {

@@ -34,9 +34,6 @@ glm::mat4 CameraSystem::GetViewMat()
     mat4 mat = mat4(1.0);
     ApplyTranslation(cameraPosition, mat);
     ApplyRotation(transfRotation, mat);
-    ApplyScale(scale, mat);
-
-    mat4 transfmat = m_pTransform->GetTransform();
 
     return inverse(mat);
 }

@@ -43,7 +43,7 @@ void LightSystem::Update(double deltatime)
                                                                                        "transform");
 
         // Light direction just relative to the angle the transform is facing
-        glm::vec3 direction = glm::normalize(pTransform->GetForwardVector());
+        vec3 direction = normalize(pTransform->GetForwardVector());
 
         // Light direction is oposite to OpenGL -z
         direction.z = -direction.z;
