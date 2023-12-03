@@ -12,6 +12,18 @@ function MoveCommand(entity, location, time, easyIn, easyOut, stopAtEnd)
                                   stopAtEnd = stopAtEnd})
 end
 
+-- Accelerates towards the given direction indefinitely
+-- direction, normalized direction to acceleate towards, been:
+--            x = 1  - Relative right to the object
+--            y = 1  - Relative up of the object
+--            z = -1 - Relative forward of the object
+-- acceleration, acceleration value to go into direction
+-- maxSpeed, maximum speed the entity can reach
+function AccelerateTowards(entity, direction, acceleration, maxSpeed)
+    return Command:new("AccelerateTowards", {entity = entity, acceleration = acceleration, 
+                                             direction = direction, maxSpeed = maxSpeed})
+end
+
 -- Rotate the entity to the referenced orientation in "time"
 -- easyIn and easyOut are optional, to set the proportion of the time that the obj will be accelerating/decelerating
 -- stopAtEnd also optional, should the object stop velocity and accelerating at end or keep going?
@@ -76,10 +88,11 @@ function CreateEntityCommand(entity, position, orientation)
 end
 
 return {
-    MoveCommand = MoveCommand, 
-    OrientCommand = OrientCommand, 
-    FollowCurveCommand = FollowCurveCommand,
-    FollowObjectCommand = FollowObjectCommand,
+    MoveCommand          = MoveCommand, 
+    AccelerateTowards    = AccelerateTowards,
+    OrientCommand        = OrientCommand, 
+    FollowCurveCommand   = FollowCurveCommand,
+    FollowObjectCommand  = FollowObjectCommand,
     DestroyEntityCommand = DestroyEntityCommand,
-    CreateEntityCommand = CreateEntityCommand
+    CreateEntityCommand  = CreateEntityCommand
 }

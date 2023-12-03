@@ -154,6 +154,10 @@ iCommand* CommandFactory::m_CreateFinalCommand(rapidjson::Value& command)
     {
         pCommand = new CreateEntity();
     }
+    else if (name == "AccelerateTowards")
+    {
+        pCommand = new AccelerateTowards();
+    }
 
     if (!pCommand)
     {

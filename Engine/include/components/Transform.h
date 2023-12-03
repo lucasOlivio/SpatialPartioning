@@ -48,6 +48,7 @@ public:
 	glm::vec3 GetUpVector();
 	glm::vec3 GetRightVector();
 	glm::vec3 GetForwardVector();
+	glm::vec3 GetRelativeVector(const glm::vec3& directionIn);
 
 	void AdjustScale(float value);
 	void SetScale(float value);

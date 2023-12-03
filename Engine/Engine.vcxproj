@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
+    <ClCompile Include="src\EngineScripting\commands\AccelerateTowards.cpp" />
     <ClCompile Include="src\EngineScripting\commands\Motion.cpp" />
     <ClCompile Include="src\EngineScripting\LuaBindings\LuaGetInfo.cpp" />
     <ClCompile Include="src\EngineScripting\commands\CreateEntity.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="include\EngineScripting\CommandGroup.h" />
     <ClInclude Include="include\EngineScripting\CommandManager.h" />
     <ClInclude Include="include\EngineScripting\commands.h" />
+    <ClInclude Include="include\EngineScripting\commands\AccelerateTowards.h" />
     <ClInclude Include="include\EngineScripting\commands\Command.h" />
     <ClInclude Include="include\EngineScripting\commands\CreateEntity.h" />
     <ClInclude Include="include\EngineScripting\commands\DestroyEntity.h" />

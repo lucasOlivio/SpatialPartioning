@@ -147,6 +147,11 @@ glm::vec3 TransformComponent::GetForwardVector()
 	return GetQuatOrientation() * FORWARD_VECTOR;
 }
 
+glm::vec3 TransformComponent::GetRelativeVector(const glm::vec3& directionIn)
+{
+	return GetQuatOrientation() * directionIn;
+}
+
 void TransformComponent::AdjustScale(float value)
 {
 	m_scale += value;

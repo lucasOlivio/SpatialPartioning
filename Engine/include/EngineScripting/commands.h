@@ -7,3 +7,4 @@
 #include "commands/FollowObject.h"
 #include "commands/DestroyEntity.h"
 #include "commands/CreateEntity.h"
+#include "commands/AccelerateTowards.h"

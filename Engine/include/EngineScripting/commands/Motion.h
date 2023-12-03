@@ -6,7 +6,7 @@
 #include "components/Force.h"
 #include <glm/vec3.hpp>
 
-// Parent class for any motion (movement or rotation) that uses acceleration and velocity
+// Parent class for any motion (movement or rotation) that uses acceleration AND velocity
 class Motion : public Command
 {
 public:
@@ -18,7 +18,7 @@ public:
 	virtual void Initialize(TransformComponent* pTransform, ForceComponent* pForce, 
 							glm::vec3 endXYZ, float time);
 	virtual void Initialize(TransformComponent* pTransform, ForceComponent* pForce, 
-							glm::vec3 endXYZ, glm::vec3 maxSpeed);
+							glm::vec3 direction, glm::vec3 maxSpeed);
 
 	// Called every frame/step:
 	// Returns true when command is done

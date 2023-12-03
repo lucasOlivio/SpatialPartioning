@@ -5,11 +5,12 @@ local utils = require("assets.scripts.commands.utils")
 return 
 {
     commandgroups.CommandGroup,
-    MoveCommand = commands.MoveCommand,
-    OrientCommand = commands.OrientCommand,
-    FollowCurveCommand = commands.FollowCurveCommand,
-    FollowObjectCommand = commands.FollowObjectCommand,
+    MoveCommand          = commands.MoveCommand,
+    AccelerateTowards    = commands.AccelerateTowards,
+    OrientCommand        = commands.OrientCommand,
+    FollowCurveCommand   = commands.FollowCurveCommand,
+    FollowObjectCommand  = commands.FollowObjectCommand,
     DestroyEntityCommand = commands.DestroyEntityCommand,
-    CreateEntityCommand = commands.CreateEntityCommand,
-    DispatchCommands = utils.DispatchCommands,
+    CreateEntityCommand  = commands.CreateEntityCommand,
+    DispatchCommands     = utils.DispatchCommands,
 }
