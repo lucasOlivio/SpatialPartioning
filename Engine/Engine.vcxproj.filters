@@ -232,6 +232,9 @@
     <ClCompile Include="src\common\lua.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\EngineScripting\commands\FollowMouse.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\EngineRenderer\CameraSystem.h">
@@ -399,6 +402,7 @@
     <ClInclude Include="include\EngineScripting\commands\Motion.h" />
     <ClInclude Include="include\EngineScripting\commands\AccelerateTowards.h" />
     <ClInclude Include="include\events\InputProperties.h" />
+    <ClInclude Include="include\EngineScripting\commands\FollowMouse.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\scene\SceneView.tpp">

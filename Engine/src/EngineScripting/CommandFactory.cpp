@@ -158,6 +158,10 @@ iCommand* CommandFactory::m_CreateFinalCommand(rapidjson::Value& command)
     {
         pCommand = new AccelerateTowards();
     }
+    else if (name == "FollowMouse")
+    {
+        pCommand = new FollowMouse();
+    }
 
     if (!pCommand)
     {

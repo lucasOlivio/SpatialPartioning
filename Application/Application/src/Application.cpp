@@ -28,15 +28,12 @@ void Application::ChangeMode()
 {
 	if (this->m_pScene->IsPlaying())
 	{
-		this->m_pWindowSystem->ReleaseMouse();
-
 		this->Engine::ChangeMode();
 	}
 	else
 	{
 		this->Engine::ChangeMode();
 
-		this->m_pWindowSystem->CaptureMouse();
 		this->LoadGM();
 	}
 }

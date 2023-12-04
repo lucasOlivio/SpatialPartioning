@@ -44,6 +44,18 @@ bool AccelerateTowards::Initialize(rapidjson::Value& document)
 
 bool AccelerateTowards::Update(double deltaTime)
 {
+    using namespace glm;
+
+    // Update direction based on rotation
+    vec3 curDirection = m_pTransform->GetRelativeVector(m_direction);
+    curDirection = glm::normalize(curDirection);
+
+    m_vecAcc = curDirection * m_acceleration;
+    m_vecMaxVel = curDirection * m_maxSpeed;
+
+    // Here we set the acceleration force
+    m_pForce->SetAcceleration(m_vecAcc);
+
     // Here we check when max speed is reached
     glm::vec3 currVel = m_pForce->GetVelocity();
 
@@ -64,15 +76,6 @@ bool AccelerateTowards::IsDone(void)
 
 bool AccelerateTowards::PreStart(void)
 {
-    m_direction = m_pTransform->GetRelativeVector(m_direction);
-    m_direction = glm::normalize(m_direction);
-
-    m_vecAcc    = m_direction * m_acceleration;
-    m_vecMaxVel = m_direction * m_maxSpeed;
-
-    // Here we set the acceleration force
-    m_pForce->SetAcceleration(m_vecAcc);
-
     return true;
 }
 

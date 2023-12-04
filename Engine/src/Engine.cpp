@@ -292,6 +292,16 @@ void Engine::GetWindowSize(int& windowHeight, int& windowWidth)
 	m_pWindowSystem->GetWindowSize(windowHeight, windowWidth);
 }
 
+void Engine::CaptureMouse()
+{
+	m_pWindowSystem->CaptureMouse();
+}
+
+void Engine::ReleaseMouse()
+{
+	m_pWindowSystem->ReleaseMouse();
+}
+
 glm::mat4 Engine::GetViewMat()
 {
 	return m_pRenderer->GetCamera()->GetViewMat();

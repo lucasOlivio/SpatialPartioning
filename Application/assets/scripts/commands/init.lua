@@ -7,6 +7,7 @@ return
     commandgroups.CommandGroup,
     MoveCommand          = commands.MoveCommand,
     AccelerateTowards    = commands.AccelerateTowards,
+    FollowMouse          = commands.FollowMouse,
     OrientCommand        = commands.OrientCommand,
     FollowCurveCommand   = commands.FollowCurveCommand,
     FollowObjectCommand  = commands.FollowObjectCommand,

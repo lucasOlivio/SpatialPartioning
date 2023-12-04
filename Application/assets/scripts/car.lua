@@ -1,4 +1,5 @@
 local accelerate   = require("assets.scripts.gameplay.accelerate")
+local followmouse   = require("assets.scripts.gameplay.followmouse")
 local directions   = require("assets.scripts.common.directions")
 local inputkeys    = require("assets.scripts.common.inputkeys")
 local inputactions = require("assets.scripts.common.inputactions")
@@ -6,12 +7,9 @@ local inputactions = require("assets.scripts.common.inputactions")
 tbGlobals = {
     maxSpeed     = 5000,
     acceleration = 1500,
+    sensitivity  = 0.07,
     accUUID      = 0
 }
-
-function onstart()
-    print("startn entity: " .. entity)
-end
 
 function StartAcceleration(direction)
     success, accUUID = accelerate.Accelerate(entity, 
@@ -19,13 +17,20 @@ function StartAcceleration(direction)
                                              tbGlobals["acceleration"], 
                                              tbGlobals["maxSpeed"])
 
-        -- Save accelerate ID state to stop later
-        tbGlobals["accUUID"] = accUUID
+    -- Save accelerate ID state to stop later
+    tbGlobals["accUUID"] = accUUID
+end
+
+function onstart()
+    print("startn entity: " .. entity)
+
+    followmouseUUID = followmouse.FollowMouse(entity, tbGlobals["sensitivity"])
+    tbGlobals["followmouseUUID"] = followmouseUUID
 end
 
 function onkeyinput(pressedkey, action, mods, scancode)
 
-    if (pressedkey == inputkeys.W and action == inputactions.PRESS) then -- W Pressed
+    if (pressedkey == inputkeys.W and (action == inputactions.PRESS or action == inputactions.REPEAT)) then -- W Pressed or hold
         StartAcceleration(directions.FORWARD)
     elseif (pressedkey == inputkeys.S and action == inputactions.PRESS) then -- S Pressed
         StartAcceleration(directions.BACKWARD)

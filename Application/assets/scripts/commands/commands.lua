@@ -24,6 +24,12 @@ function AccelerateTowards(entity, direction, acceleration, maxSpeed)
                                              direction = direction, maxSpeed = maxSpeed})
 end
 
+-- Capute and follows the mouse indefinitely
+-- sensitivity, speed to follow the mouse movement
+function FollowMouse(entity, sensitivity)
+    return Command:new("FollowMouse", {entity = entity, sensitivity = sensitivity})
+end
+
 -- Rotate the entity to the referenced orientation in "time"
 -- easyIn and easyOut are optional, to set the proportion of the time that the obj will be accelerating/decelerating
 -- stopAtEnd also optional, should the object stop velocity and accelerating at end or keep going?
@@ -90,6 +96,7 @@ end
 return {
     MoveCommand          = MoveCommand, 
     AccelerateTowards    = AccelerateTowards,
+    FollowMouse          = FollowMouse,
     OrientCommand        = OrientCommand, 
     FollowCurveCommand   = FollowCurveCommand,
     FollowObjectCommand  = FollowObjectCommand,

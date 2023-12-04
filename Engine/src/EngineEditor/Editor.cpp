@@ -736,8 +736,6 @@ void Editor::m_UpdateCamera(float xpos, float ypos)
 	transfQuat = transfQuat * pitch;
 
 	m_pTransformCamera->SetOrientation(transfQuat);
-
-	//m_pTransformCamera->AdjustOrientation(vec3(yoffset, -xoffset, 0.0f));
 }
 
 void Editor::m_MoveCamera(double deltaTime)

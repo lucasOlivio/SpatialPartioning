@@ -27,7 +27,7 @@ private:
 	TransformComponent* m_pTransform;
 	ForceComponent* m_pForce;
 
-	glm::vec3 m_direction; // Relative direction normalized to accelerate towards, been:
+	glm::vec3 m_direction; // Relative direction normalized to accelerate towards:
 						   // x = 1  - Relative right to the object
 						   // y = 1  - Relative up of the object
 						   // z = -1 - Relative forward of the object

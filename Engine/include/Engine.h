@@ -42,6 +42,8 @@ public:
 	GLFWwindow* GetWindow();
 	glm::mat4 GetWindowProjectionMat();
 	void GetWindowSize(int& windowHeight, int& windowWidth);
+	void CaptureMouse();
+	void ReleaseMouse();
 
 	glm::mat4 GetViewMat();
 
