@@ -46,6 +46,4 @@ private:
 	ScriptingSystem();
 
 	static ScriptingSystem* m_pInstance;
-	
-	
 };

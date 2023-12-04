@@ -46,13 +46,6 @@ bool ScriptingSystem::LoadScene()
 {
     m_pCommandManager->ClearCommands();
 
-    bool isLoaded = m_pLuaBrain->LoadScene();
-    if (!isLoaded)
-    {
-        CheckEngineError("lua brain loading error\n\n");
-        return false;
-    }
-
     return true;
 }
 

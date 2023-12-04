@@ -133,6 +133,12 @@ void LuaBrain::DeleteScript(EntityID entityID)
 
 void LuaBrain::OnStart()
 {
+	bool sceneLoaded = LoadScene();
+	if (!sceneLoaded)
+	{
+		return;
+	}
+
 	for ( itEnttScript itScript = m_mapScriptsData.begin(); itScript != m_mapScriptsData.end(); itScript++)
 	{
 		EntityID entityID = itScript->first;
@@ -232,7 +238,7 @@ void LuaBrain::OnKeyInput(sKeyInfo keyInfo)
 	return;
 }
 
-// Runs a script, but doesn't save it (originally used to set the ObjectID)
+// Runs a script, but doesn't save it
 void LuaBrain::RunScriptImmediately(std::string script)
 {
 	int error = luaL_loadstring(m_pLuaState,
