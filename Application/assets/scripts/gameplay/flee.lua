@@ -1,6 +1,7 @@
 local commands = require("assets.scripts.commands")
 
 -- Move for "distance" in zigzag to avoid enemy 
+-- Returns the command UUID
 function Flee(entity, distance)
     local mainCommandGroup = CommandGroup:new("followGroup")
     x, y, z, rx, ry, rz, scale = GetTransform(entity)
@@ -23,7 +24,7 @@ function Flee(entity, distance)
         end
     end
 
-    commands.DispatchCommands(mainCommandGroup)
+    return commands.DispatchCommands(mainCommandGroup)
 end
 
 return {

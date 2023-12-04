@@ -14,7 +14,7 @@ bool Motion::Initialize(rapidjson::Value& document)
     using namespace rapidjson;
     using namespace myutils;
 
-    std::string entity;
+    float entity;
     float easyIn;
     float easyOut;
     bool isValid = true;
@@ -25,7 +25,7 @@ bool Motion::Initialize(rapidjson::Value& document)
     ParserJSON parser = ParserJSON();
 
     Value& objEntt = document["entity"];
-    isValid &= parser.GetString(objEntt, entity);
+    isValid &= parser.GetFloat(objEntt, entity);
 
     Value& objEnd = document["endxyz"];
     isValid &= parser.GetVec3(objEnd, m_endxyz);
@@ -55,8 +55,8 @@ bool Motion::Initialize(rapidjson::Value& document)
         return false;
     }
 
-    m_pTransform = SceneView::Get()->GetComponentByTag<TransformComponent>(entity, "transform");
-    m_pForce = SceneView::Get()->GetComponentByTag<ForceComponent>(entity, "force");
+    m_pTransform = SceneView::Get()->GetComponent<TransformComponent>(entity, "transform");
+    m_pForce = SceneView::Get()->GetComponent<ForceComponent>(entity, "force");
 
     // Calculate time phases
     m_easyInTime = easyIn * m_time;

@@ -1,5 +1,6 @@
 local commands = require("assets.scripts.commands")
 
+-- Returns the command UUID
 function DestroyShip(entity)
     x, y, z, rx, ry, rz, scale = GetTransform(entity)
 
@@ -10,7 +11,7 @@ function DestroyShip(entity)
     mainCommandGroup:addCommand(selfdestroy, true) 
     mainCommandGroup:addCommand(destroiedship, true) 
 
-    commands.DispatchCommands(mainCommandGroup)
+    return commands.DispatchCommands(mainCommandGroup)
 end
 
 return {

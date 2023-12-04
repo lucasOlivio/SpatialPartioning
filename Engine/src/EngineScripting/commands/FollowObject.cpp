@@ -16,7 +16,7 @@ bool FollowObject::Initialize(rapidjson::Value& document)
     using namespace rapidjson;
 
     std::string targetTag;
-    std::string entity;
+    float entity;
     float easyIn;
     float easyOut;
     bool isValid = true;
@@ -30,7 +30,7 @@ bool FollowObject::Initialize(rapidjson::Value& document)
     Value& objTarget = document["targetTag"];
     isValid &= parser.GetString(objTarget, targetTag);
     Value& objEntt = document["entity"];
-    isValid &= parser.GetString(objEntt, entity);
+    isValid &= parser.GetFloat(objEntt, entity);
     Value& objStep = document["timeStep"];
     isValid &= parser.GetFloat(objStep, m_timeStep);
     Value& objSpeed = document["maxSpeed"];
@@ -55,8 +55,8 @@ bool FollowObject::Initialize(rapidjson::Value& document)
     }
 
     m_pTransformTarget = SceneView::Get()->GetComponentByTag<TransformComponent>(targetTag, "transform");
-    m_pTransform = SceneView::Get()->GetComponentByTag<TransformComponent>(entity, "transform");
-    m_pForce = SceneView::Get()->GetComponentByTag<ForceComponent>(entity, "force");
+    m_pTransform = SceneView::Get()->GetComponent<TransformComponent>(entity, "transform");
+    m_pForce = SceneView::Get()->GetComponent<ForceComponent>(entity, "force");
 
     m_lastTargetPosition = m_pTransformTarget->GetPosition();
 

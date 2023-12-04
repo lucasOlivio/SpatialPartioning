@@ -1,28 +1,39 @@
-local accelerate = require("assets.scripts.gameplay.accelerate")
-local inputkeys   = require("assets.scripts.common.inputkeys")
-local inputactions   = require("assets.scripts.common.inputactions")
+local accelerate   = require("assets.scripts.gameplay.accelerate")
+local directions   = require("assets.scripts.common.directions")
+local inputkeys    = require("assets.scripts.common.inputkeys")
+local inputactions = require("assets.scripts.common.inputactions")
 
 tbGlobals = {
-    maxSpeed = 3000,
-    acceleration = 750
+    maxSpeed     = 5000,
+    acceleration = 1500,
+    accUUID      = 0
 }
 
 function onstart()
     print("startn entity: " .. entity)
-    print("majxspeed: " .. tbGlobals.maxSpeed)
-    tbGlobals["maxSpeed"] = tbGlobals["maxSpeed"] + 1000
+end
+
+function StartAcceleration(direction)
+    success, accUUID = accelerate.Accelerate(entity, 
+                                             direction, 
+                                             tbGlobals["acceleration"], 
+                                             tbGlobals["maxSpeed"])
+
+        -- Save accelerate ID state to stop later
+        tbGlobals["accUUID"] = accUUID
 end
 
 function onkeyinput(pressedkey, action, mods, scancode)
-    print("inputing entity: " .. entity)
-    print("majxspeed: " .. tbGlobals.maxSpeed)
 
-    if (pressedkey == inputkeys.W and inputactions.PRESS == action ) then      -- W Pressed
-        accUUID = accelerate.Accelerate(entity, common.directions.FORWARD, acceleration, maxSpeed)
-
-        -- Save accelerate ID state to later
-        tbGlobals["accUUID"] = accUUID
-    elseif (pressedkey == inputkeys.W and inputactions.RELEASE == action ) then -- W Released
-        CancelCommand(tbGlobals["accUUID"])
+    if (pressedkey == inputkeys.W and action == inputactions.PRESS) then -- W Pressed
+        StartAcceleration(directions.FORWARD)
+    elseif (pressedkey == inputkeys.S and action == inputactions.PRESS) then -- S Pressed
+        StartAcceleration(directions.BACKWARD)
+    end
+        
+    if (action == inputactions.RELEASE) then
+        if(tbGlobals["accUUID"] > 0) then  -- W or S Released
+            CancelCommand(tbGlobals["accUUID"])
+        end
     end
 end

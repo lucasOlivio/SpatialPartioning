@@ -180,6 +180,18 @@ bool CommandGroup::m_IsDoneParallel(void)
 
 bool CommandGroup::m_PostEndParallel()
 {
+	for (std::vector< iCommand* >::iterator itCurCommand = m_vecParallelCommands.begin();
+		itCurCommand != m_vecParallelCommands.end();
+		itCurCommand++)
+	{
+		iCommand* pThisCommand = *itCurCommand;
+
+		bool successEnd = pThisCommand->PostEnd();
+		if (!successEnd)
+		{
+			return false;
+		}
+	}
 	return true;
 }
 
@@ -248,5 +260,13 @@ bool CommandGroup::m_UpdateSerial(double deltaTime)
 
 bool CommandGroup::m_PostEndSerial()
 {
-	return true;
+	if (m_vecSerialCommands.size() == 0)
+	{
+		return true;
+	}
+
+	iCommand* pNextCommand = *m_itNextSerialCommand;
+	bool successEnd = pNextCommand->PostEnd();
+
+	return successEnd;
 }

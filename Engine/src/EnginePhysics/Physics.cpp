@@ -34,34 +34,36 @@ void Physics::Update(double deltaTime)
 		return;
 	}
 
+	SceneView* pScene = SceneView::Get();
+
 	// Change position based on the acceleration and velocity
-	for (SceneView::Get()->First("force"); !SceneView::Get()->IsDone(); SceneView::Get()->Next())
+	for (pScene->First("force"); !pScene->IsDone(); pScene->Next())
 	{
-		EntityID entityID = SceneView::Get()->CurrentKey();
-		ForceComponent* pForce = SceneView::Get()->CurrentValue<ForceComponent>();
+		EntityID entityID = pScene->CurrentKey();
+		ForceComponent* pForce = pScene->CurrentValue<ForceComponent>();
 
 		if (!pForce->IsActive())
 		{
 			continue;
 		}
 
-		TransformComponent* pTransform = SceneView::Get()->GetComponent<TransformComponent>(entityID, "transform");
+		TransformComponent* pTransform = pScene->GetComponent<TransformComponent>(entityID, "transform");
 
 		m_ApplyForce(pForce, pTransform, deltaTime);
 	}
 
 	// Check if new position is intersecting with other entity
-	for (SceneView::Get()->First("collision"); !SceneView::Get()->IsDone(); SceneView::Get()->Next())
+	for (pScene->First("collision"); !pScene->IsDone(); pScene->Next())
 	{
-		EntityID entityID = SceneView::Get()->CurrentKey();
-		CollisionComponent* pCollision = SceneView::Get()->CurrentValue<CollisionComponent>();
+		EntityID entityID = pScene->CurrentKey();
+		CollisionComponent* pCollision = pScene->CurrentValue<CollisionComponent>();
 
 		if (!pCollision->IsActive())
 		{
 			continue;
 		}
 
-		TransformComponent* pTransform = SceneView::Get()->GetComponent<TransformComponent>(entityID, "transform");
+		TransformComponent* pTransform = pScene->GetComponent<TransformComponent>(entityID, "transform");
 
 		m_CheckCollisions(entityID, pCollision, pTransform);
 	}
@@ -69,19 +71,19 @@ void Physics::Update(double deltaTime)
 	// Apply respective response for each collision types
 	for (sCollisionData* pCollision : m_vecCollided)
 	{
-		TransformComponent* pTransformA = SceneView::Get()->GetComponent<TransformComponent>(pCollision->entityA, "transform");
-		TransformComponent* pTransformB = SceneView::Get()->GetComponent<TransformComponent>(pCollision->entityB, "transform");
+		TransformComponent* pTransformA = pScene->GetComponent<TransformComponent>(pCollision->entityA, "transform");
+		TransformComponent* pTransformB = pScene->GetComponent<TransformComponent>(pCollision->entityB, "transform");
 
 		// Static bodies won`t have force
 		ForceComponent* pForceA = nullptr;
 		if (pCollision->bodyTypeA != eBodyType::STATIC)
 		{
-			ForceComponent* pForceA = SceneView::Get()->GetComponent<ForceComponent>(pCollision->entityA, "force");
+			ForceComponent* pForceA = pScene->GetComponent<ForceComponent>(pCollision->entityA, "force");
 		}
 		ForceComponent* pForceB = nullptr;
 		if (pCollision->bodyTypeB != eBodyType::STATIC)
 		{
-			pForceB = SceneView::Get()->GetComponent<ForceComponent>(pCollision->entityB, "force");
+			pForceB = pScene->GetComponent<ForceComponent>(pCollision->entityB, "force");
 		}
 
 
@@ -281,6 +283,7 @@ void Physics::m_ApplyForce(ForceComponent* pForce, TransformComponent* pTransfor
 													   pForce->GetDrag(),
 													   (float)deltaTime);
 	pForce->SetVelocity(velThisFrame);
+
 	// New object position
 	glm::vec3 deltaPosition = velThisFrame * (float)deltaTime;
 

@@ -37,6 +37,8 @@ void CommandManager::DeleteForeverCommand(uint16_t UUID)
 			continue;
 		}
 
+		pGroup->PostEnd();
+
 		// Found the command, delete pointer, rm from vector
 		delete pGroup;
 

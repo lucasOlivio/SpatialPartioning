@@ -229,6 +229,9 @@
     <ClCompile Include="src\EngineScripting\commands\AccelerateTowards.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\common\lua.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\EngineRenderer\CameraSystem.h">

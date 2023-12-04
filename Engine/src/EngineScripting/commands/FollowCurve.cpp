@@ -14,7 +14,7 @@ bool FollowCurve::Initialize(rapidjson::Value& document)
 {
     using namespace rapidjson;
 
-    std::string entity;
+    float entity;
     float accRatio;
     float deaccRatio;
     bool isValid = true;
@@ -26,7 +26,7 @@ bool FollowCurve::Initialize(rapidjson::Value& document)
     ParserJSON parser = ParserJSON();
 
     Value& objEntt = document["entity"];
-    isValid &= parser.GetString(objEntt, entity);
+    isValid &= parser.GetFloat(objEntt, entity);
     Value& objLoc = document["controlPoints"];
     isValid &= parser.GetVecVec3(objLoc, m_controlPoints);
     Value& objTime = document["time"];
@@ -50,8 +50,8 @@ bool FollowCurve::Initialize(rapidjson::Value& document)
         return false;
     }
 
-    m_pTransform = SceneView::Get()->GetComponentByTag<TransformComponent>(entity, "transform");
-    m_pForce = SceneView::Get()->GetComponentByTag<ForceComponent>(entity, "force");
+    m_pTransform = SceneView::Get()->GetComponent<TransformComponent>(entity, "transform");
+    m_pForce = SceneView::Get()->GetComponent<ForceComponent>(entity, "force");
 
     // First point should aways be the current position for simplicity
     m_controlPoints.insert(m_controlPoints.begin(), m_pTransform->GetPosition());

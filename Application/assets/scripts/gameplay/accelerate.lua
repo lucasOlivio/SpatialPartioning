@@ -1,6 +1,7 @@
 local commands = require("assets.scripts.commands")
 
 -- Accelerates the object to the given direction
+-- Returns the command UUID
 function Accelerate(entity, direction, acceleration, maxSpeed)
     local mainCommandGroup = CommandGroup:new("accelerate")
 
@@ -8,7 +9,7 @@ function Accelerate(entity, direction, acceleration, maxSpeed)
 
     mainCommandGroup:addCommand(moveCommand, true) 
 
-    commands.DispatchCommands(mainCommandGroup, true)
+    return commands.DispatchCommands(mainCommandGroup, true)
 end
 
 return {

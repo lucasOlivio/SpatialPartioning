@@ -10,7 +10,7 @@ bool AccelerateTowards::Initialize(rapidjson::Value& document)
 {
     using namespace rapidjson;
 
-    std::string entity;
+    float entity;
     bool isValid = true;
 
     // Initialize default command variables
@@ -19,7 +19,7 @@ bool AccelerateTowards::Initialize(rapidjson::Value& document)
     ParserJSON parser = ParserJSON();
 
     Value& objEntt = document["entity"];
-    isValid &= parser.GetString(objEntt, entity);
+    isValid &= parser.GetFloat(objEntt, entity);
 
     Value& objDir = document["direction"];
     isValid &= parser.GetVec3(objDir, m_direction);
@@ -36,8 +36,8 @@ bool AccelerateTowards::Initialize(rapidjson::Value& document)
         return false;
     }
 
-    m_pTransform = SceneView::Get()->GetComponentByTag<TransformComponent>(entity, "transform");
-    m_pForce = SceneView::Get()->GetComponentByTag<ForceComponent>(entity, "force");
+    m_pTransform = SceneView::Get()->GetComponent<TransformComponent>(entity, "transform");
+    m_pForce = SceneView::Get()->GetComponent<ForceComponent>(entity, "force");
 
     return true;
 }
@@ -78,6 +78,9 @@ bool AccelerateTowards::PreStart(void)
 
 bool AccelerateTowards::PostEnd(void)
 {
+    // Reset acceleration
+    m_pForce->SetAcceleration(glm::vec3(0));
+
     return true;
 }
 
