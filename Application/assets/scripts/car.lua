@@ -9,13 +9,10 @@ function onstart()
     print("startn entity: " .. entity)
     
     -- Example usage:
-    accelerate.Accelerate(entity, common.directions.FORWARD, acceleration, maxSpeed)
-end
-
-function onupdate(deltatime)
-    print(deltatime)
 end
 
 function onkeyinput(pressedkey, action, mods, scancode)
-    print(pressedkey)
+    if (pressedkey == common.inputkeys.W) then
+        accelerate.Accelerate(entity, common.directions.FORWARD, acceleration, maxSpeed)
+    end
 end

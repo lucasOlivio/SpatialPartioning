@@ -18,7 +18,7 @@ public:
 	bool Initialize(std::string baseScriptsPath);
 	bool LoadScene(); 
 	void Destroy();
-	void LoadScript(EntityID entityID, std::string scriptName);
+	void LoadScript(EntityID entityID);
 
 	// Lua commands
 	void OnStart();

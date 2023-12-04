@@ -3,8 +3,8 @@
 
 #include "common/lua.h"
 #include "common/types.h"
-#include "LuaProperties.h"
 #include "events/InputProperties.h"
+#include "components/Script.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -21,7 +21,8 @@ public:
 
 	bool LoadScene();
 
-	bool LoadScript(EntityID entityID, std::string scriptName);
+	bool LoadScript(EntityID entityId);
+	bool LoadScript(ScriptComponent* pScript);
 	void DeleteScript(EntityID entityID);
 
 	// Call all onstart for each script
@@ -40,22 +41,11 @@ public:
 	void RunScriptImmediately(std::string script);
 
 private:
-	// Singleton
-	LuaBrain() {};
-	static LuaBrain* m_pInstance;
-
-	std::string m_baseScriptsPath;
-
-	std::map< EntityID,
-		      sScriptData* > m_mapScriptsData;
-
 	lua_State* m_pLuaState;
 
 	std::string m_DecodeLuaErrorToString(int error);
 
 	std::string m_ReadLuaScriptFile(std::string scriptName);
-
-	sScriptData* m_GetScriptData(EntityID entityId);
 
 	// Loads a new table into registry and return the table index from lua registry
 	int m_CreateTableRegistry();
@@ -71,6 +61,12 @@ private:
 	// Calls the next function on the stack
 	// Returns the result of the call
 	int m_CallFunction(int numParameters, int numReturns);
+
+	// Singleton
+	LuaBrain() {};
+	static LuaBrain* m_pInstance;
+
+	std::string m_baseScriptsPath;
 };
 
 #endif

@@ -1,5 +1,4 @@
 #include "EngineScripting/LuaBrain.h"
-#include "components/Script.h"
 #include "common/utils.h"
 #include "EngineScripting/luaBindings/LuaCommandDispatcher.h"
 #include "EngineScripting/luaBindings/LuaGetInfo.h"
@@ -9,10 +8,6 @@
 #include <sstream>
 
 LuaBrain* LuaBrain::m_pInstance = nullptr;
-
-typedef std::map< EntityID, sScriptData*> mapEnttScript;
-typedef std::pair< EntityID, sScriptData*> pairEnttScript;
-typedef mapEnttScript::iterator itEnttScript;
 
 LuaBrain::~LuaBrain()
 {
@@ -52,21 +47,12 @@ bool LuaBrain::Initialize(std::string baseScriptsPath)
 
 void LuaBrain::Destroy()
 {
-	for (pairEnttScript pairData : m_mapScriptsData)
-	{
-		// Release table of functions from registry
-		luaL_unref(m_pLuaState, LUA_REGISTRYINDEX, pairData.second->tableFunctions);
-
-		delete pairData.second;
-	}
-
 	lua_close(m_pLuaState);
 	return;
 }
 
 bool LuaBrain::LoadScene()
 {
-	m_mapScriptsData.clear();
 	printf("Loading scripts...\n");
 	
 	// Lua functions bindings
@@ -80,7 +66,7 @@ bool LuaBrain::LoadScene()
 			continue;
 		}
 
-		bool isLoaded = LoadScript(entityId, pScript->scriptName);
+		bool isLoaded = LoadScript(pScript);
 		if (!isLoaded)
 		{
 			CheckEngineError(("Not able to load " + pScript->scriptName).c_str());
@@ -92,28 +78,44 @@ bool LuaBrain::LoadScene()
 }
 
 
+bool LuaBrain::LoadScript(EntityID entityId)
+{
+	ScriptComponent* pScript = SceneView::Get()->GetComponent<ScriptComponent>(entityId, "script");
+
+	bool isLoaded = LoadScript(pScript);
+	if (isLoaded)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 // Saves (and overwrites) any script
 // scriptName is just so we can delete them later
-bool LuaBrain::LoadScript(EntityID entityID, std::string scriptName)
+bool LuaBrain::LoadScript(ScriptComponent* pScript)
 {
-	std::string scriptSource = m_ReadLuaScriptFile(scriptName);
+	std::string scriptSource = m_ReadLuaScriptFile(pScript->scriptName);
 	if (scriptSource == "")
 	{
 		return false;
 	}
-	sScriptData* pScriptData = new sScriptData();
 
 	// Run script to load functions
 	RunScriptImmediately(scriptSource);
 
 	// Load all functions into registry
-	pScriptData->tableFunctions = m_CreateTableRegistry();
-	pScriptData->onstart = m_LoadFunctionRegistry(pScriptData->tableFunctions, "onstart");
-	pScriptData->onupdate = m_LoadFunctionRegistry(pScriptData->tableFunctions, "onupdate");
-	pScriptData->oncollision = m_LoadFunctionRegistry(pScriptData->tableFunctions, "oncollision");
-	pScriptData->onkeyinput = m_LoadFunctionRegistry(pScriptData->tableFunctions, "onkeyinput");
+	int tbIdx = m_CreateTableRegistry();
+	int onstart = m_LoadFunctionRegistry(tbIdx, "onstart");
+	int onupdate = m_LoadFunctionRegistry(tbIdx, "onupdate");
+	int oncollision = m_LoadFunctionRegistry(tbIdx, "oncollision");
+	int onkeyinput = m_LoadFunctionRegistry(tbIdx, "onkeyinput");
 
-	m_mapScriptsData[entityID] = pScriptData;
+	pScript->SetTableRegistry(tbIdx);
+	pScript->SetOnStart(onstart);
+	pScript->SetOnUpdate(onupdate);
+	pScript->SetOnCollision(oncollision);
+	pScript->SetOnKeyInput(onkeyinput);
 
 	return true;
 }
@@ -121,13 +123,10 @@ bool LuaBrain::LoadScript(EntityID entityID, std::string scriptName)
 
 void LuaBrain::DeleteScript(EntityID entityID)
 {
-	sScriptData* pScriptData = m_GetScriptData(entityID);
-	if (pScriptData)
-	{
-		delete pScriptData;
-	}
+	// Remove scripts functions loaded from registry
+	ScriptComponent* pScript = SceneView::Get()->GetComponent<ScriptComponent>(entityID, "script");
+	luaL_unref(m_pLuaState, LUA_REGISTRYINDEX, pScript->GetTableRegistry());
 
-	m_mapScriptsData.erase(entityID);
 	return;
 }
 
@@ -139,18 +138,23 @@ void LuaBrain::OnStart()
 		return;
 	}
 
-	for ( itEnttScript itScript = m_mapScriptsData.begin(); itScript != m_mapScriptsData.end(); itScript++)
+	for (SceneView::Get()->First("script"); !SceneView::Get()->IsDone(); SceneView::Get()->Next())
 	{
-		EntityID entityID = itScript->first;
-		sScriptData* pScriptData = itScript->second;
+		EntityID entityId = SceneView::Get()->CurrentKey();
+		ScriptComponent* pScript = SceneView::Get()->CurrentValue<ScriptComponent>();
 
-		if (pScriptData->onstart == LUA_REFNIL)
+		int tbIdx = pScript->GetTableRegistry();
+		int fncIdx = pScript->GetOnStart();
+
+		if (fncIdx == LUA_REFNIL)
 		{
-			// Script doesn`t have an onstart function
+			// Script doesn`t have this function
 			continue;
 		}
 
-		m_GetFunctionRegistry(pScriptData->tableFunctions, pScriptData->onstart);
+		// For now we do this here separately because we haven't found a way
+		// to load the function then load the parameters in a generic way
+		m_GetFunctionRegistry(tbIdx, fncIdx);
 
 		// Call the onstart function for each object
 		m_CallFunction(0, 0);
@@ -162,20 +166,23 @@ void LuaBrain::OnStart()
 // Call all the active scripts that are loaded
 void LuaBrain::Update(float deltaTime)
 {
-	for (itEnttScript itScript = m_mapScriptsData.begin(); 
-		 itScript != m_mapScriptsData.end(); 
-		 itScript++)
+	for (SceneView::Get()->First("script"); !SceneView::Get()->IsDone(); SceneView::Get()->Next())
 	{
-		EntityID entityID = itScript->first;
-		sScriptData* pScriptData = itScript->second;
+		EntityID entityId = SceneView::Get()->CurrentKey();
+		ScriptComponent* pScript = SceneView::Get()->CurrentValue<ScriptComponent>();
 
-		if (pScriptData->onupdate == LUA_REFNIL)
+		int tbIdx = pScript->GetTableRegistry();
+		int fncIdx = pScript->GetOnUpdate();
+
+		if (fncIdx == LUA_REFNIL)
 		{
-			// Script doesn`t have an onstart function
+			// Script doesn`t have this function
 			continue;
 		}
 
-		m_GetFunctionRegistry(pScriptData->tableFunctions, pScriptData->onupdate);
+		// For now we do this here separately because we haven't found a way
+		// to load the function then load the parameters in a generic way
+		m_GetFunctionRegistry(tbIdx, fncIdx);
 
 		lua_pushnumber(m_pLuaState, deltaTime);
 
@@ -187,20 +194,21 @@ void LuaBrain::Update(float deltaTime)
 
 void LuaBrain::OnCollision(EntityID entityID, std::string tagCollided)
 {
-	for (itEnttScript itScript = m_mapScriptsData.begin();
-		itScript != m_mapScriptsData.end();
-		itScript++)
+	for (SceneView::Get()->First("script"); !SceneView::Get()->IsDone(); SceneView::Get()->Next())
 	{
-		EntityID entityID = itScript->first;
-		sScriptData* pScriptData = itScript->second;
+		EntityID entityId = SceneView::Get()->CurrentKey();
+		ScriptComponent* pScript = SceneView::Get()->CurrentValue<ScriptComponent>();
 
-		if (pScriptData->onstart == LUA_REFNIL)
+		int tbIdx = pScript->GetTableRegistry();
+		int fncIdx = pScript->GetOnCollision();
+
+		if (fncIdx == LUA_REFNIL)
 		{
 			// Script doesn`t have this function
 			continue;
 		}
 
-		m_GetFunctionRegistry(pScriptData->tableFunctions, pScriptData->onupdate);
+		m_GetFunctionRegistry(tbIdx, fncIdx);
 
 		lua_pushstring(m_pLuaState, tagCollided.c_str());
 
@@ -212,20 +220,21 @@ void LuaBrain::OnCollision(EntityID entityID, std::string tagCollided)
 
 void LuaBrain::OnKeyInput(sKeyInfo keyInfo)
 {
-	for (itEnttScript itScript = m_mapScriptsData.begin();
-		itScript != m_mapScriptsData.end();
-		itScript++)
+	for (SceneView::Get()->First("script"); !SceneView::Get()->IsDone(); SceneView::Get()->Next())
 	{
-		EntityID entityID = itScript->first;
-		sScriptData* pScriptData = itScript->second;
+		EntityID entityId = SceneView::Get()->CurrentKey();
+		ScriptComponent* pScript = SceneView::Get()->CurrentValue<ScriptComponent>();
 
-		if (pScriptData->onkeyinput == LUA_REFNIL)
+		int tbIdx = pScript->GetTableRegistry();
+		int fncIdx = pScript->GetOnKeyInput();
+
+		if (fncIdx == LUA_REFNIL)
 		{
 			// Script doesn`t have this function
 			continue;
 		}
 
-		m_GetFunctionRegistry(pScriptData->tableFunctions, pScriptData->onkeyinput);
+		m_GetFunctionRegistry(tbIdx, fncIdx);
 
 		lua_pushnumber(m_pLuaState, keyInfo.pressedKey);
 		lua_pushnumber(m_pLuaState, keyInfo.action);
@@ -329,19 +338,6 @@ std::string LuaBrain::m_ReadLuaScriptFile(std::string scriptName)
 
 	// Return the contents as a string
 	return buffer.str();
-}
-
-sScriptData* LuaBrain::m_GetScriptData(EntityID entityId)
-{
-	using namespace std;
-
-	itEnttScript it = m_mapScriptsData.find(entityId);
-	if (it == m_mapScriptsData.end())
-	{
-		return nullptr;
-	}
-
-	return it->second;
 }
 
 int LuaBrain::m_CreateTableRegistry()
