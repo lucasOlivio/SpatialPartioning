@@ -139,10 +139,12 @@
     <ClInclude Include="include\EngineScripting\LuaBindings\LuaCommandDispatcher.h" />
     <ClInclude Include="include\EngineScripting\LuaBindings\LuaGetInfo.h" />
     <ClInclude Include="include\EngineScripting\LuaBrain.h" />
+    <ClInclude Include="include\EngineScripting\LuaProperties.h" />
     <ClInclude Include="include\EngineScripting\ScriptingSystem.h" />
     <ClInclude Include="include\events\iCollisionListener.h" />
+    <ClInclude Include="include\events\InputProperties.h" />
     <ClInclude Include="include\events\MouseEvent.h" />
-    <ClInclude Include="include\events\sCollisionData.h" />
+    <ClInclude Include="include\events\CollisionProperties.h" />
     <ClInclude Include="include\components\Model.h" />
     <ClInclude Include="include\components\Transform.h" />
     <ClInclude Include="include\common\ConfigReadWriteFactory.h" />

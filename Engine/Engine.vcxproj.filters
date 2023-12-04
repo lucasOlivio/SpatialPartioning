@@ -350,7 +350,7 @@
     </ClInclude>
     <ClInclude Include="include\components\Spawner.h" />
     <ClInclude Include="include\components\Force.h" />
-    <ClInclude Include="include\events\sCollisionData.h" />
+    <ClInclude Include="include\events\CollisionProperties.h" />
     <ClInclude Include="include\events\iCollisionListener.h" />
     <ClInclude Include="include\components\Tag.h" />
     <ClInclude Include="include\components\Script.h" />
@@ -395,6 +395,8 @@
     <ClInclude Include="include\common\lua.h" />
     <ClInclude Include="include\EngineScripting\commands\Motion.h" />
     <ClInclude Include="include\EngineScripting\commands\AccelerateTowards.h" />
+    <ClInclude Include="include\EngineScripting\LuaProperties.h" />
+    <ClInclude Include="include\events\InputProperties.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\scene\SceneView.tpp">

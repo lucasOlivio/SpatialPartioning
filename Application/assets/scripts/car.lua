@@ -12,5 +12,10 @@ function onstart()
     accelerate.Accelerate(entity, common.directions.FORWARD, acceleration, maxSpeed)
 end
 
-function update(deltatime)
+function onupdate(deltatime)
+    print(deltatime)
+end
+
+function onkeyinput(pressedkey, action, mods, scancode)
+    print(pressedkey)
 end

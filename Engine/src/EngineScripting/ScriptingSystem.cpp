@@ -85,6 +85,11 @@ void ScriptingSystem::OnCollision(sCollisionData* pCollision)
     m_pLuaBrain->OnCollision(pCollision->entityB, pCollision->tagA);
 }
 
+void ScriptingSystem::OnKeyInput(sKeyInfo keyInfo)
+{
+    m_pLuaBrain->OnKeyInput(keyInfo);
+}
+
 bool ScriptingSystem::AddCommand(const char* json, bool isForever, uint16_t& UUIDOut)
 {
     using namespace std;

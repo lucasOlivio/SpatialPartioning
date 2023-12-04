@@ -10,6 +10,10 @@
 
 LuaBrain* LuaBrain::m_pInstance = nullptr;
 
+typedef std::map< EntityID, sScriptData*> mapEnttScript;
+typedef std::pair< EntityID, sScriptData*> pairEnttScript;
+typedef mapEnttScript::iterator itEnttScript;
+
 LuaBrain::~LuaBrain()
 {
 	return;
@@ -40,21 +44,29 @@ bool LuaBrain::Initialize(std::string baseScriptsPath)
 	lua_setglobal(m_pLuaState, "GetFrontDirection");
 	lua_pushcfunction(m_pLuaState, lua_GetTransform);
 	lua_setglobal(m_pLuaState, "GetTransform");
-	lua_pushcfunction(m_pLuaState, lua_Action);
-	lua_setglobal(m_pLuaState, "Action");
+	lua_pushcfunction(m_pLuaState, lua_GetKey);
+	lua_setglobal(m_pLuaState, "GetKey");
 
 	return true;
 }
 
 void LuaBrain::Destroy()
 {
+	for (pairEnttScript pairData : m_mapScriptsData)
+	{
+		// Release table of functions from registry
+		luaL_unref(m_pLuaState, LUA_REGISTRYINDEX, pairData.second->tableFunctions);
+
+		delete pairData.second;
+	}
+
 	lua_close(m_pLuaState);
 	return;
 }
 
 bool LuaBrain::LoadScene()
 {
-	m_mapScripts.clear();
+	m_mapScriptsData.clear();
 	printf("Loading scripts...\n");
 	
 	// Lua functions bindings
@@ -89,45 +101,53 @@ bool LuaBrain::LoadScript(EntityID entityID, std::string scriptName)
 	{
 		return false;
 	}
+	sScriptData* pScriptData = new sScriptData();
 
-	m_mapScripts[entityID] = scriptSource;
+	// Run script to load functions
+	RunScriptImmediately(scriptSource);
+
+	// Load all functions into registry
+	pScriptData->tableFunctions = m_CreateTableRegistry();
+	pScriptData->onstart = m_LoadFunctionRegistry(pScriptData->tableFunctions, "onstart");
+	pScriptData->onupdate = m_LoadFunctionRegistry(pScriptData->tableFunctions, "onupdate");
+	pScriptData->oncollision = m_LoadFunctionRegistry(pScriptData->tableFunctions, "oncollision");
+	pScriptData->onkeyinput = m_LoadFunctionRegistry(pScriptData->tableFunctions, "onkeyinput");
+
+	m_mapScriptsData[entityID] = pScriptData;
+
 	return true;
 }
 
 
 void LuaBrain::DeleteScript(EntityID entityID)
 {
-	m_mapScripts.erase(entityID);
+	sScriptData* pScriptData = m_GetScriptData(entityID);
+	if (pScriptData)
+	{
+		delete pScriptData;
+	}
+
+	m_mapScriptsData.erase(entityID);
 	return;
 }
 
 void LuaBrain::OnStart()
 {
-	for (std::map< EntityID, std::string /*source*/>::iterator itScript =
-		m_mapScripts.begin(); itScript != m_mapScripts.end(); itScript++)
+	for ( itEnttScript itScript = m_mapScriptsData.begin(); itScript != m_mapScriptsData.end(); itScript++)
 	{
 		EntityID entityID = itScript->first;
-		std::string curLuaScript = itScript->second;
+		sScriptData* pScriptData = itScript->second;
 
-		// Run script to load functions
-		RunScriptImmediately(curLuaScript);
-
-		// Call the onstart function for each object
-		lua_getglobal(m_pLuaState, "onstart");
-		int result = lua_pcall(m_pLuaState, 0, 0, 0);
-		if (result != LUA_OK) {
-			std::string luaError;
-			// Get error information from top of stack (-1 is top)
-			luaError.append(lua_tostring(m_pLuaState, -1));
-
-			std::cout << "-------------------------------------------------------" << std::endl;
-			std::cout << "Error running onstart: ";
-			std::cout << "Entity: " << entityID << std::endl;
-			std::cout << luaError << std::endl;
-			std::cout << "-------------------------------------------------------" << std::endl;
-			lua_pop(m_pLuaState, 1); // Pop the function from the stack
+		if (pScriptData->onstart == LUA_REFNIL)
+		{
+			// Script doesn`t have an onstart function
+			continue;
 		}
 
+		m_GetFunctionRegistry(pScriptData->tableFunctions, pScriptData->onstart);
+
+		// Call the onstart function for each object
+		m_CallFunction(0, 0);
 	}
 
 	return;
@@ -136,32 +156,24 @@ void LuaBrain::OnStart()
 // Call all the active scripts that are loaded
 void LuaBrain::Update(float deltaTime)
 {
-	for (std::map< EntityID, std::string /*source*/>::iterator itScript =
-		m_mapScripts.begin(); itScript != m_mapScripts.end(); itScript++)
+	for (itEnttScript itScript = m_mapScriptsData.begin(); 
+		 itScript != m_mapScriptsData.end(); 
+		 itScript++)
 	{
 		EntityID entityID = itScript->first;
-		std::string curLuaScript = itScript->second;
+		sScriptData* pScriptData = itScript->second;
 
-		// Run script to load functions
-		RunScriptImmediately(curLuaScript);
-
-		// Call the update function for each object
-		lua_getglobal(m_pLuaState, "update");
-		lua_pushnumber(m_pLuaState, deltaTime);
-		int result = lua_pcall(m_pLuaState, 1, 0, 0);
-		if (result != LUA_OK) {
-			std::string luaError;
-			// Get error information from top of stack (-1 is top)
-			luaError.append(lua_tostring(m_pLuaState, -1));
-
-			std::cout << "-------------------------------------------------------" << std::endl;
-			std::cout << "Error running update: ";
-			std::cout << "Entity: " << entityID << std::endl;
-			std::cout << luaError << std::endl;
-			std::cout << "-------------------------------------------------------" << std::endl;
-			lua_pop(m_pLuaState, 1); // Pop the function from the stack
+		if (pScriptData->onupdate == LUA_REFNIL)
+		{
+			// Script doesn`t have an onstart function
+			continue;
 		}
 
+		m_GetFunctionRegistry(pScriptData->tableFunctions, pScriptData->onupdate);
+
+		lua_pushnumber(m_pLuaState, deltaTime);
+
+		m_CallFunction(1, 0);
 	}
 
 	return;
@@ -169,38 +181,52 @@ void LuaBrain::Update(float deltaTime)
 
 void LuaBrain::OnCollision(EntityID entityID, std::string tagCollided)
 {
-	for (std::map< EntityID, std::string /*source*/>::iterator itScript =
-		m_mapScripts.begin(); itScript != m_mapScripts.end(); itScript++)
+	for (itEnttScript itScript = m_mapScriptsData.begin();
+		itScript != m_mapScriptsData.end();
+		itScript++)
 	{
-		EntityID currEntity = itScript->first;
+		EntityID entityID = itScript->first;
+		sScriptData* pScriptData = itScript->second;
 
-		if (entityID != currEntity)
+		if (pScriptData->onstart == LUA_REFNIL)
 		{
+			// Script doesn`t have this function
 			continue;
 		}
 
-		std::string curLuaScript = itScript->second;
+		m_GetFunctionRegistry(pScriptData->tableFunctions, pScriptData->onupdate);
 
-		// Run script to load functions
-		RunScriptImmediately(curLuaScript);
-
-		// Call the update function for each object
-		lua_getglobal(m_pLuaState, "oncollision");
 		lua_pushstring(m_pLuaState, tagCollided.c_str());
-		int result = lua_pcall(m_pLuaState, 1, 0, 0);
-		if (result != LUA_OK) {
-			std::string luaError;
-			// Get error information from top of stack (-1 is top)
-			luaError.append(lua_tostring(m_pLuaState, -1));
 
-			std::cout << "-------------------------------------------------------" << std::endl;
-			std::cout << "Error running oncollision: ";
-			std::cout << "Entity: " << entityID << std::endl;
-			std::cout << luaError << std::endl;
-			std::cout << "-------------------------------------------------------" << std::endl;
-			lua_pop(m_pLuaState, 1); // Pop the function from the stack
+		m_CallFunction(1, 0);
+	}
+
+	return;
+}
+
+void LuaBrain::OnKeyInput(sKeyInfo keyInfo)
+{
+	for (itEnttScript itScript = m_mapScriptsData.begin();
+		itScript != m_mapScriptsData.end();
+		itScript++)
+	{
+		EntityID entityID = itScript->first;
+		sScriptData* pScriptData = itScript->second;
+
+		if (pScriptData->onkeyinput == LUA_REFNIL)
+		{
+			// Script doesn`t have this function
+			continue;
 		}
 
+		m_GetFunctionRegistry(pScriptData->tableFunctions, pScriptData->onkeyinput);
+
+		lua_pushnumber(m_pLuaState, keyInfo.pressedKey);
+		lua_pushnumber(m_pLuaState, keyInfo.action);
+		lua_pushnumber(m_pLuaState, keyInfo.mods);
+		lua_pushnumber(m_pLuaState, keyInfo.scanCode);
+
+		m_CallFunction(4, 0);
 	}
 
 	return;
@@ -297,4 +323,72 @@ std::string LuaBrain::m_ReadLuaScriptFile(std::string scriptName)
 
 	// Return the contents as a string
 	return buffer.str();
+}
+
+sScriptData* LuaBrain::m_GetScriptData(EntityID entityId)
+{
+	using namespace std;
+
+	itEnttScript it = m_mapScriptsData.find(entityId);
+	if (it == m_mapScriptsData.end())
+	{
+		return nullptr;
+	}
+
+	return it->second;
+}
+
+int LuaBrain::m_CreateTableRegistry()
+{
+	lua_newtable(m_pLuaState);
+	return luaL_ref(m_pLuaState, LUA_REGISTRYINDEX);
+}
+
+int LuaBrain::m_LoadFunctionRegistry(int tableIdx, const char* funcName)
+{
+	// Retrieve table registry to store function
+	lua_rawgeti(m_pLuaState, LUA_REGISTRYINDEX, tableIdx);
+	// Retrieve function named "funcName" to store
+	lua_getglobal(m_pLuaState, funcName);
+	// store function in the function table
+	// (-2 table is 2 places up the current stack)
+	int funcIdx = luaL_ref(m_pLuaState, -2); 
+
+	// Done with the function table, so pop it
+	lua_pop(m_pLuaState, 1); 
+
+	return funcIdx;
+}
+
+void LuaBrain::m_GetFunctionRegistry(int tableIdx, int funcIdx)
+{
+	lua_rawgeti(m_pLuaState, LUA_REGISTRYINDEX, tableIdx); // retrieve function table
+	lua_rawgeti(m_pLuaState, -1, funcIdx);				   // retrieve function
+
+	return;
+}
+
+int LuaBrain::m_CallFunction(int numParameters, int numReturns)
+{
+	using namespace std;
+
+	// Call the onstart function for each object
+	int result = lua_pcall(m_pLuaState, numParameters, numReturns, 0);
+	if (result != LUA_OK) 
+	{
+		std::cout << "Lua: There was an error..." << std::endl;
+		std::cout << m_DecodeLuaErrorToString(result) << std::endl;
+
+		string luaError;
+		// Get error information from top of stack (-1 is top)
+		luaError.append(lua_tostring(m_pLuaState, -1));
+
+		cout << "-------------------------------------------------------" << endl;
+		cout << "Error running function: ";
+		cout << luaError << endl;
+		cout << "-------------------------------------------------------" << endl;
+		lua_pop(m_pLuaState, 1);
+	}
+
+	return result;
 }

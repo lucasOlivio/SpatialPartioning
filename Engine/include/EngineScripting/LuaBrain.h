@@ -3,6 +3,8 @@
 
 #include "common/lua.h"
 #include "common/types.h"
+#include "LuaProperties.h"
+#include "events/InputProperties.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -25,13 +27,16 @@ public:
 	// Call all onstart for each script
 	void OnStart();
 
-	// Call all the active scripts that are loaded
+	// Call all onupdate for each script
 	void Update(float deltaTime);
 
-	// Call collision function only for this entity
+	// Call oncollision function only for this entity
 	void OnCollision(EntityID entityId, std::string tagCollided);
 
-	// Runs a script, but doesn't save it (originally used to set the ObjectID)
+	// Call onkeyinput for every script listening
+	void OnKeyInput(sKeyInfo keyInfo);
+
+	// Runs a script, but doesn't save it
 	void RunScriptImmediately(std::string script);
 
 private:
@@ -42,13 +47,30 @@ private:
 	std::string m_baseScriptsPath;
 
 	std::map< EntityID,
-		      std::string /*scriptSource*/ > m_mapScripts;
+		      sScriptData* > m_mapScriptsData;
 
 	lua_State* m_pLuaState;
 
 	std::string m_DecodeLuaErrorToString(int error);
 
 	std::string m_ReadLuaScriptFile(std::string scriptName);
+
+	sScriptData* m_GetScriptData(EntityID entityId);
+
+	// Loads a new table into registry and return the table index from lua registry
+	int m_CreateTableRegistry();
+
+	// Load the given function into the given table registry
+	// (The function must already be loaded from script)
+	// Returns the function index into the table registry
+	int m_LoadFunctionRegistry(int tableIdx, const char* funcName);
+
+	// Retrieve the function from the registry to the stack
+	void m_GetFunctionRegistry(int tableIdx, int funcIdx);
+
+	// Calls the next function on the stack
+	// Returns the result of the call
+	int m_CallFunction(int numParameters, int numReturns);
 };
 
 #endif

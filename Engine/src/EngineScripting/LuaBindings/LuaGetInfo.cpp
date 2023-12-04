@@ -41,13 +41,13 @@ int lua_GetTransform(lua_State* L)
 	return 7;
 }
 
-int lua_Action(lua_State* L)
+int lua_GetKey(lua_State* L)
 {
-	const char* action = lua_tostring(L, 1);
+	int key = lua_tonumber(L, 1);
 	
-	bool isAction = Input::IsActionKeyPressed(action);
+	bool isKey = Input::IsKeyPressed(key);
 
-	lua_pushboolean(L, isAction);
+	lua_pushboolean(L, isKey);
 
 	return 1;
 }

@@ -21,10 +21,10 @@ int lua_GetFrontDirection(lua_State* L);
 int lua_GetTransform(lua_State* L);
 
 /**
-* Check if action key is pressed
+* Check key state
 *
-* @param const char. Action key (eg: shoot)
+* @param int. Key to retrieve
 *
 * @return If the key is pressed or not.
 */
-int lua_Action(lua_State* L);
+int lua_GetKey(lua_State* L);
