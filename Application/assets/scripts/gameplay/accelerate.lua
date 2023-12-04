@@ -6,9 +6,9 @@ function Accelerate(entity, direction, acceleration, maxSpeed)
 
     local moveCommand = commands.AccelerateTowards(entity, direction, acceleration, maxSpeed)
 
-    mainCommandGroup:addCommand(moveCommand, false) 
+    mainCommandGroup:addCommand(moveCommand, true) 
 
-    commands.DispatchCommands(mainCommandGroup)
+    commands.DispatchCommands(mainCommandGroup, true)
 end
 
 return {

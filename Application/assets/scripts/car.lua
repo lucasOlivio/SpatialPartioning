@@ -1,18 +1,28 @@
 local accelerate = require("assets.scripts.gameplay.accelerate")
-local common   = require("assets.scripts.common")
+local inputkeys   = require("assets.scripts.common.inputkeys")
+local inputactions   = require("assets.scripts.common.inputactions")
 
-local entity       = "camera"
-local maxSpeed     = 1500
-local acceleration = 200
+tbGlobals = {
+    maxSpeed = 3000,
+    acceleration = 750
+}
 
 function onstart()
     print("startn entity: " .. entity)
-    
-    -- Example usage:
+    print("majxspeed: " .. tbGlobals.maxSpeed)
+    tbGlobals["maxSpeed"] = tbGlobals["maxSpeed"] + 1000
 end
 
 function onkeyinput(pressedkey, action, mods, scancode)
-    if (pressedkey == common.inputkeys.W) then
-        accelerate.Accelerate(entity, common.directions.FORWARD, acceleration, maxSpeed)
+    print("inputing entity: " .. entity)
+    print("majxspeed: " .. tbGlobals.maxSpeed)
+
+    if (pressedkey == inputkeys.W and inputactions.PRESS == action ) then      -- W Pressed
+        accUUID = accelerate.Accelerate(entity, common.directions.FORWARD, acceleration, maxSpeed)
+
+        -- Save accelerate ID state to later
+        tbGlobals["accUUID"] = accUUID
+    elseif (pressedkey == inputkeys.W and inputactions.RELEASE == action ) then -- W Released
+        CancelCommand(tbGlobals["accUUID"])
     end
 end

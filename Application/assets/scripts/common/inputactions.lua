@@ -1,0 +1,9 @@
+RELEASE = 0
+PRESS   = 1
+REPEAT  = 2
+
+return {
+    RELEASE = RELEASE,
+    PRESS = PRESS,
+    REPEAT = REPEAT
+}

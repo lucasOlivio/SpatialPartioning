@@ -22,7 +22,7 @@ public:
 	bool LoadScene();
 
 	bool LoadScript(EntityID entityId);
-	bool LoadScript(ScriptComponent* pScript);
+	bool LoadScript(EntityID entityId, ScriptComponent* pScript);
 	void DeleteScript(EntityID entityID);
 
 	// Call all onstart for each script
@@ -50,17 +50,29 @@ private:
 	// Loads a new table into registry and return the table index from lua registry
 	int m_CreateTableRegistry();
 
-	// Load the given function into the given table registry
-	// (The function must already be loaded from script)
-	// Returns the function index into the table registry
-	int m_LoadFunctionRegistry(int tableIdx, const char* funcName);
+	// Load the given object into the given table registry
+	// (The object must already be loaded from script)
+	// Returns the object index into the table registry
+	int m_LoadObjectRegistry(int tableIdx, const char* funcName);
 
-	// Retrieve the function from the registry to the stack
-	void m_GetFunctionRegistry(int tableIdx, int funcIdx);
+	// Retrieve the table from the registry to the stack
+	void m_GetTableRegistry(int tableIdx);
+
+	// Retrieve the object from the registry to the stack
+	void m_GetObjectRegistry(int objIdx);
 
 	// Calls the next function on the stack
 	// Returns the result of the call
 	int m_CallFunction(int numParameters, int numReturns);
+
+	// Setup all global variables and load function into stack
+	bool m_PreFunctionCall(int tbIdx, int entityIdx, int globalsIdx, int fncIdx);
+
+	// Remove globals from stack and update globals on registry if function is OK
+	void m_PosFunctionCall(int result);
+
+	// Save the scripts global variables from table "tbGlobals" into component
+	void m_SaveGlobals(int tableIdx, char* tbGlobals, ScriptComponent* pScript);
 
 	// Singleton
 	LuaBrain() {};

@@ -198,7 +198,7 @@
     <ConfigsDeploymentPath>..\bin\configs\</ConfigsDeploymentPath>
     <DeployZip>..\Application.zip</DeployZip>
   </PropertyGroup>
-  <Target Name="AfterBuild">
+  <Target Name="AfterBuild" Condition="$(Configuration)==Release">
     <!-- Remove older build -->
     <RemoveDir Directories="$(DeploymentPath)" Condition="Exists('$(DeploymentPath)')" />
     <Delete Files="$(DeployZip)"  Condition="Exists('$(DeployZip)')" />

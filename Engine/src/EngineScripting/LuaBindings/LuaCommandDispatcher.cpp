@@ -24,3 +24,14 @@ int lua_SendCommands(lua_State* L)
 
 	return 2;
 }
+
+int lua_CancelCommand(lua_State* L)
+{
+	// Command UUID to be canceled
+	int commandUUID = lua_tonumber(L, 1);
+
+	// Send to system
+	ScriptingSystem::Get()->DeleteForeverCommand(commandUUID);
+
+	return 0;
+}

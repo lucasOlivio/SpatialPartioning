@@ -110,3 +110,8 @@ bool ScriptingSystem::AddCommand(const char* json, bool isForever, uint16_t& UUI
 
     return true;
 }
+
+void ScriptingSystem::DeleteForeverCommand(uint16_t UUID)
+{
+    m_pCommandManager->DeleteForeverCommand(UUID);
+}

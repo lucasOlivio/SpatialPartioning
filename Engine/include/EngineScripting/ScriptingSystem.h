@@ -36,6 +36,9 @@ public:
 	 */
 	bool AddCommand(const char* json, bool isForever, uint16_t& UUIDOut);
 
+	// Delete commands from forever list
+	void DeleteForeverCommand(uint16_t UUID);
+
 private:
 	LuaBrain* m_pLuaBrain;
 	CommandManager* m_pCommandManager;

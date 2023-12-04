@@ -139,7 +139,6 @@
     <ClInclude Include="include\EngineScripting\LuaBindings\LuaCommandDispatcher.h" />
     <ClInclude Include="include\EngineScripting\LuaBindings\LuaGetInfo.h" />
     <ClInclude Include="include\EngineScripting\LuaBrain.h" />
-    <ClInclude Include="include\EngineScripting\ScriptProperties.h" />
     <ClInclude Include="include\EngineScripting\ScriptingSystem.h" />
     <ClInclude Include="include\events\iCollisionListener.h" />
     <ClInclude Include="include\events\InputProperties.h" />

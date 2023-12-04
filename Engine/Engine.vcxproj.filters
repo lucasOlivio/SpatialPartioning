@@ -395,7 +395,6 @@
     <ClInclude Include="include\common\lua.h" />
     <ClInclude Include="include\EngineScripting\commands\Motion.h" />
     <ClInclude Include="include\EngineScripting\commands\AccelerateTowards.h" />
-    <ClInclude Include="include\EngineScripting\ScriptProperties.h" />
     <ClInclude Include="include\events\InputProperties.h" />
   </ItemGroup>
   <ItemGroup>

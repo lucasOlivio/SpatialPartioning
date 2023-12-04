@@ -1,9 +1,10 @@
 #include "components/Script.h"
 
+typedef std::map<const char*, int>::iterator itObjIdx;
+
 ScriptComponent::ScriptComponent()
 {
-    m_sFunctions = sScriptFunctions();
-    m_sState     = sScriptState();
+    m_tbRegistry = -1;
 }
 
 void ScriptComponent::GetInfo(sComponentInfo& compInfoOut)
@@ -29,50 +30,26 @@ void ScriptComponent::SetParameter(sParameterInfo& parameterIn)
 
 void ScriptComponent::SetTableRegistry(int tbIdx)
 {
-    m_sFunctions.tableFunctions = tbIdx;
+    m_tbRegistry = tbIdx;
 }
 
-void ScriptComponent::SetOnStart(int fncIdx)
+void ScriptComponent::SetLuaObject(const char* objName, int objIdx)
 {
-    m_sFunctions.onstart = fncIdx;
-}
-
-void ScriptComponent::SetOnUpdate(int fncIdx)
-{
-    m_sFunctions.onupdate = fncIdx;
-}
-
-void ScriptComponent::SetOnCollision(int fncIdx)
-{
-    m_sFunctions.oncollision = fncIdx;
-}
-
-void ScriptComponent::SetOnKeyInput(int fncIdx)
-{
-    m_sFunctions.onkeyinput = fncIdx;
+    m_mapLuaObjects[objName] = objIdx;
 }
 
 int ScriptComponent::GetTableRegistry()
 {
-    return m_sFunctions.tableFunctions;
+    return m_tbRegistry;
 }
 
-int ScriptComponent::GetOnStart()
+int ScriptComponent::GetLuaObject(const char* objName)
 {
-    return m_sFunctions.onstart;
+    itObjIdx it = m_mapLuaObjects.find(objName);
+    if (it == m_mapLuaObjects.end())
+    {
+        return -1;
+    }
+    return it->second;
 }
 
-int ScriptComponent::GetOnUpdate()
-{
-    return m_sFunctions.onupdate;
-}
-
-int ScriptComponent::GetOnCollision()
-{
-    return m_sFunctions.oncollision;
-}
-
-int ScriptComponent::GetOnKeyInput()
-{
-    return m_sFunctions.onkeyinput;
-}
