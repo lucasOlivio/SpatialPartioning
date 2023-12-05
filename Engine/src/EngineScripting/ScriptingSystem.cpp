@@ -46,6 +46,12 @@ bool ScriptingSystem::LoadScene()
 {
     m_pCommandManager->ClearCommands();
 
+    bool sceneLoaded = m_pLuaBrain->LoadScene();
+    if (!sceneLoaded)
+    {
+        return false;
+    }
+
     return true;
 }
 

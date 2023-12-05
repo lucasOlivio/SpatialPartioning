@@ -319,6 +319,13 @@ void Physics::m_CheckCollisions(EntityID entityA, CollisionComponent* pCollA, Tr
 		return;
 	}
 
+	if (pCollA->Get_eBodyType() == eBodyType::STATIC)
+	{
+		// Static objects dont move
+		m_vecCollVisited.push_back(entityA);
+		return;
+	}
+
 	mat4 transformMatA = pTransformA->GetTransformNoRotation();
 	vec3 contactPointA(0);
 	vec3 contactPointB(0);
@@ -330,12 +337,6 @@ void Physics::m_CheckCollisions(EntityID entityA, CollisionComponent* pCollA, Tr
 		CollisionComponent* pCollB = SceneView::Get()->GetComponent<CollisionComponent>(entityB, "collision");
 		TransformComponent* pTransformB = SceneView::Get()->GetComponent<TransformComponent>(entityB, "transform");
 		mat4 transformMatB = pTransformB->GetTransformNoRotation();
-
-		if (pCollA->Get_eBodyType() == eBodyType::STATIC && pCollB->Get_eBodyType() == eBodyType::STATIC)
-		{
-			// 2 static objects should not trigger
-			continue;
-		}
 
 		if (pCollA->Get_eShape() == eShape::AABB2D && pCollB->Get_eShape() == eShape::AABB2D)
 		{

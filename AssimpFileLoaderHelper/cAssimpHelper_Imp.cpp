@@ -37,6 +37,8 @@ bool cFileLoader_Imp::m_ProcessScene(const aiScene* scene, sMesh* drawInfo)
 		drawInfo->numberOfTriangles += currMesh->mNumFaces;
 		drawInfo->numberOfVertices += currMesh->mNumVertices;
 	}
+	// Load the triangles for organize structure
+	drawInfo->pTriangles = new sTriangleMesh[drawInfo->numberOfTriangles];
 	// Load the vertices in the opengl structure VBO
 	drawInfo->pVertices = new sVertex[drawInfo->numberOfVertices];
 	// Load the indices for the Index Buffer
@@ -116,14 +118,29 @@ bool cFileLoader_Imp::m_ProcessScene(const aiScene* scene, sMesh* drawInfo)
 
 		// Load the indices for the Index Buffer
 		// TODO: Load different indices numbers based on shape (For now we just will use triangles)
-		for (unsigned int currTriangleIndex = 0; currTriangleIndex < drawInfo->numberOfTriangles; currTriangleIndex++)
+
+		for (unsigned int currTriangleIndex = 0; 
+			 currTriangleIndex < drawInfo->numberOfTriangles; 
+			 currTriangleIndex++)
 		{
+			// Jump every 3 vertex index
 			unsigned int indicesIndex = currTriangleIndex * 3;
-			drawInfo->pIndices[indicesIndex] = currMesh->mFaces[currTriangleIndex].mIndices[0];
+
+			int v1 = currMesh->mFaces[currTriangleIndex].mIndices[0];
+			int v2 = currMesh->mFaces[currTriangleIndex].mIndices[1];
+			int v3 = currMesh->mFaces[currTriangleIndex].mIndices[2];
+
+			drawInfo->pIndices[indicesIndex] = v1;
 			indicesIndex += 1;
-			drawInfo->pIndices[indicesIndex] = currMesh->mFaces[currTriangleIndex].mIndices[1];
+			drawInfo->pIndices[indicesIndex] = v2;
 			indicesIndex += 1;
-			drawInfo->pIndices[indicesIndex] = currMesh->mFaces[currTriangleIndex].mIndices[2];
+			drawInfo->pIndices[indicesIndex] = v3;
+			indicesIndex += 1;
+
+			drawInfo->pTriangles[currTriangleIndex].pVertices = new sVertex[3];
+			drawInfo->pTriangles[currTriangleIndex].pVertices[0] = drawInfo->pVertices[v1];
+			drawInfo->pTriangles[currTriangleIndex].pVertices[1] = drawInfo->pVertices[v2];
+			drawInfo->pTriangles[currTriangleIndex].pVertices[2] = drawInfo->pVertices[v3];
 		}
 	}
 	drawInfo->minX = minX;
@@ -170,6 +187,7 @@ bool cFileLoader_Imp::Load3DModelFile(std::string filename, AssimpHelper::cFileL
 
 	this->m_ProcessScene(scene, drawInfo);
     // We're done. Everything will be cleaned up by the importer destructor
+	importer.FreeScene();
     return true;
 }
 

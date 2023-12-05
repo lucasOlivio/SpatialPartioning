@@ -148,12 +148,6 @@ void LuaBrain::DeleteScript(EntityID entityID)
 
 void LuaBrain::OnStart()
 {
-	bool sceneLoaded = LoadScene();
-	if (!sceneLoaded)
-	{
-		return;
-	}
-
 	SceneView* pScene = SceneView::Get();
 	for (pScene->First("script"); !pScene->IsDone(); pScene->Next())
 	{

@@ -401,6 +401,14 @@ bool Engine::LoadScene(std::string filePath)
 		return false;
 	}
 
+	// TODO: This whole playing/editor state should be managed by the scene or separatedly
+	// Bellow here only load when game running
+	bool editorRunning = m_pEditor->IsRunning();
+	if (editorRunning)
+	{
+		return true;
+	}
+
 	isLoaded = m_pMediaPlayer->LoadScene();
 	if (!isLoaded)
 	{
