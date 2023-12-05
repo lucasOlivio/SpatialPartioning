@@ -5,9 +5,9 @@ local inputkeys    = require("assets.scripts.common.inputkeys")
 local inputactions = require("assets.scripts.common.inputactions")
 
 tbGlobals = {
-    maxSpeed     = 5000,
-    acceleration = 1500,
-    sensitivity  = 0.07,
+    maxSpeed     = 3000,
+    acceleration = 1000,
+    sensitivity  = 0.007,
     accUUID      = 0
 }
 
@@ -30,7 +30,7 @@ end
 
 function onkeyinput(pressedkey, action, mods, scancode)
 
-    if (pressedkey == inputkeys.W and (action == inputactions.PRESS or action == inputactions.REPEAT)) then -- W Pressed or hold
+    if (pressedkey == inputkeys.W and (action == inputactions.PRESS)) then -- W Pressed or hold
         StartAcceleration(directions.FORWARD)
     elseif (pressedkey == inputkeys.S and action == inputactions.PRESS) then -- S Pressed
         StartAcceleration(directions.BACKWARD)

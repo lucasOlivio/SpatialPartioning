@@ -14,6 +14,8 @@ void CameraComponent::GetInfo(sComponentInfo& compInfoOut)
 
     this->AddCompParInfo("upVector", "vec3", this->upVector, compInfoOut);
     this->AddCompParInfo("distance", "float", this->distance, compInfoOut);
+    this->AddCompParInfo("height", "float", this->height, compInfoOut);
+    this->AddCompParInfo("offsetTarget", "float", this->offsetTarget, compInfoOut);
 }
 
 void CameraComponent::SetParameter(sParameterInfo& parameterIn)
@@ -25,6 +27,12 @@ void CameraComponent::SetParameter(sParameterInfo& parameterIn)
     }
     else if (parameterIn.parameterName == "distance") {
         this->distance = parameterIn.parameterFloatValue;
+    }
+    else if (parameterIn.parameterName == "height") {
+        this->height = parameterIn.parameterFloatValue;
+    }
+    else if (parameterIn.parameterName == "offsetTarget") {
+        this->offsetTarget = parameterIn.parameterFloatValue;
     }
 
     return;

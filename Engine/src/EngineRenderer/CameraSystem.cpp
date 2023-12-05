@@ -30,25 +30,27 @@ glm::mat4 CameraSystem::GetViewMat()
     quat transfRotation = m_pTransform->GetQuatOrientation();
     float scale = m_pTransform->GetScale();
 
-    // Get Camera transform based on offset camera position
-    mat4 mat = mat4(1.0);
-    ApplyTranslation(cameraPosition, mat);
-    ApplyRotation(transfRotation, mat);
+    vec3 taget = m_pTransform->GetPosition() + (m_pTransform->GetForwardVector() * m_pCamera->offsetTarget);
 
-    return inverse(mat);
+    return lookAt(
+        cameraPosition,
+        taget,
+        m_pTransform->GetUpVector()
+    );
 }
 
 glm::vec3 CameraSystem::GetCameraPosition()
 {
     using namespace glm;
 
-    vec3 transfForward = m_pTransform->GetForwardVector();
+    vec3 transfUp       = m_pTransform->GetUpVector();
+    vec3 transfForward  = m_pTransform->GetForwardVector();
     vec3 transfPosition = m_pTransform->GetPosition();
-    float distance = m_pCamera->distance;
 
-    vec3 offsetPos = -distance * transfForward;
+    vec3 offsetDist   = -m_pCamera->distance * transfForward;
+    vec3 offsetHeight = m_pCamera->height * transfUp;
 
-    vec3 camFinalPos = transfPosition + offsetPos;
+    vec3 camFinalPos = transfPosition + offsetDist + offsetHeight;
 
     return camFinalPos;
 }

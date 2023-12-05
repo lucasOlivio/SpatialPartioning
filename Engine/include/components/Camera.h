@@ -9,6 +9,8 @@ class CameraComponent : public Component
 public:
 	glm::vec3 upVector;
 	float distance;
+	float height;
+	float offsetTarget;
 
 	virtual void GetInfo(sComponentInfo& compInfoOut);
 	virtual void SetParameter(sParameterInfo& parameterIn);
