@@ -5,12 +5,18 @@
 #include "components/Model.h"
 #include "components/Force.h"
 #include "components/Collision.h"
+#include "BroadPhaseCollision.h"
+
+class DebugSystem;
 
 class Physics
 {
 public:
 	Physics(CollisionEvent* pCollisionEvent);
 	~Physics();
+
+	// Load static collisions to AABBs broadphase
+	bool LoadScene();
 
 	// Resets collisions
 	void NewFrame();
@@ -33,10 +39,17 @@ public:
 						 sAABB2D* aabb2dB, glm::mat4 matTransfB,
 						 glm::vec3& contactPointA, glm::vec3& contactPointB,
 						 glm::vec3& collisionNormalA, glm::vec3& collisionNormalB);
+
+	bool SphereMeshTriangles_Test(sSphere* sphereA, glm::vec3 sphereAPosition,
+								  sMesh* meshB, glm::mat4 matTransfB,
+								  glm::vec3& contactPointA, glm::vec3& contactPointB,
+								  glm::vec3& collisionNormalA, glm::vec3& collisionNormalB);
 private:
 	bool m_isRunning;
 
 	CollisionEvent* m_pCollisionEvent;
+
+	BroadPhaseCollision* m_pBroadPhaseCollision;
 
 	// All the entities that we already tested in the frame (true or false)
 	std::vector<EntityID> m_vecCollVisited;
@@ -52,9 +65,11 @@ private:
 	void m_CheckCollisions(EntityID entityA, CollisionComponent* pCollA, TransformComponent* pTransformA);
 
 	// Given the collision, calculates the new positions and velocities
-	void m_ResolveCollision(sCollisionData* pCollisionEvent, TransformComponent* pTransformA,
-		TransformComponent* pTransformB, ForceComponent* pForceA, ForceComponent* pForceB);
+	void m_ResolveCollision(sCollisionData* pCollisionEvent, 
+							TransformComponent* pTransformA, TransformComponent* pTransformB, 
+							ForceComponent* pForceA, ForceComponent* pForceB);
 
-	// TODO: When on game release remove these debug codes
-	void m_DebugCollisions();
+	// TODO: Temporarily to debug broadphase creation
+	friend class DebugSystem;
+
 };

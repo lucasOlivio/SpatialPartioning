@@ -9,11 +9,19 @@ Physics::Physics(CollisionEvent* pCollisionEvent)
 {
 	m_isRunning = false;
 	m_pCollisionEvent = pCollisionEvent;
+	m_pBroadPhaseCollision = new BroadPhaseCollision();
 }
 
 Physics::~Physics()
 {
+	delete m_pBroadPhaseCollision;
+}
 
+bool Physics::LoadScene()
+{
+	m_pBroadPhaseCollision->LoadScene();
+
+	return true;
 }
 
 void Physics::NewFrame()
@@ -65,7 +73,7 @@ void Physics::Update(double deltaTime)
 
 		TransformComponent* pTransform = pScene->GetComponent<TransformComponent>(entityID, "transform");
 
-		m_CheckCollisions(entityID, pCollision, pTransform);
+		// m_CheckCollisions(entityID, pCollision, pTransform);
 	}
 
 	// Apply respective response for each collision types
@@ -264,6 +272,83 @@ bool Physics::AABBAABB2D_Test(sAABB2D* aabb2dA, glm::mat4 matTransfA,
 	return true; // Collision detected
 }
 
+bool Physics::SphereMeshTriangles_Test(sSphere* sphereA, glm::vec3 sphereAPosition, 
+									   sMesh* meshB, glm::mat4 matTransfB, 
+									   glm::vec3& contactPointA, glm::vec3& contactPointB, 
+									   glm::vec3& collisionNormalA, glm::vec3& collisionNormalB)
+{
+	using namespace glm;
+	using namespace myutils;
+
+	float closestDistanceSoFar = FLT_MAX;
+	vec3 closestTriangleVertices[3] = { vec3(0.0f), vec3(0.0f), vec3(0.0f) };
+	vec3 closestContactPoint = vec3(0.0f);
+	unsigned int indexOfClosestTriangle = INT_MAX;
+
+	// Which triangle is closest to this sphere (right now)
+	for (unsigned int index = 0; index != meshB->numberOfIndices; index += 3)
+	{
+		vec3 verts[3];
+
+		// Get triangle vertices
+		verts[0].x = meshB->pVertices[meshB->pIndices[index]].x;
+		verts[0].y = meshB->pVertices[meshB->pIndices[index]].y;
+		verts[0].z = meshB->pVertices[meshB->pIndices[index]].z;
+
+		verts[1].x = meshB->pVertices[meshB->pIndices[index + 1]].x;
+		verts[1].y = meshB->pVertices[meshB->pIndices[index + 1]].y;
+		verts[1].z = meshB->pVertices[meshB->pIndices[index + 1]].z;
+
+		verts[2].x = meshB->pVertices[meshB->pIndices[index + 2]].x;
+		verts[2].y = meshB->pVertices[meshB->pIndices[index + 2]].y;
+		verts[2].z = meshB->pVertices[meshB->pIndices[index + 2]].z;
+
+		vec4 vertsWorld[3];
+		vertsWorld[0] = (matTransfB * vec4(verts[0], 1.0f));
+		vertsWorld[1] = (matTransfB * vec4(verts[1], 1.0f));
+		vertsWorld[2] = (matTransfB * vec4(verts[2], 1.0f));
+
+		// Getting closest point in triangle
+		vec3 thisTriangleClosestPoint = ClosestPtPointTriangle(sphereAPosition,
+														vertsWorld[0], vertsWorld[1], vertsWorld[2]);
+
+		// Is this the closest so far
+		float distanceToThisTriangle = distance(thisTriangleClosestPoint, sphereAPosition);
+		if (distanceToThisTriangle > closestDistanceSoFar)
+		{
+			continue;
+		}
+
+		// this one is closer
+		closestDistanceSoFar = distanceToThisTriangle;
+		// Make note of the triangle index
+		indexOfClosestTriangle = index;
+		// 
+		closestTriangleVertices[0] = vertsWorld[0];
+		closestTriangleVertices[1] = vertsWorld[1];
+		closestTriangleVertices[2] = vertsWorld[2];
+
+		closestContactPoint = thisTriangleClosestPoint;
+
+	} //for ( unsigned int index...
+
+	// Hit the triangle?
+	if (closestDistanceSoFar > sphereA->radius)
+	{
+		// no
+		return false;
+	}
+
+	collisionNormalB = GetNormal(closestTriangleVertices);
+	collisionNormalA = collisionNormalB;
+
+	// Calculate the contact points
+	contactPointA = closestContactPoint;
+	contactPointB = closestContactPoint;
+
+	return true;
+}
+
 void Physics::m_ApplyForce(ForceComponent* pForce, TransformComponent* pTransform, double deltaTime)
 {
 	// Check if object have mass
@@ -330,12 +415,14 @@ void Physics::m_CheckCollisions(EntityID entityA, CollisionComponent* pCollA, Tr
 	vec3 contactPointA(0);
 	vec3 contactPointB(0);
 
+	SceneView* pScene = SceneView::Get();
+
 	// Go through list of already visited components, this way we are sure we'll only test 1 time each
 	for (EntityID entityB : m_vecCollVisited)
 	{
 		bool isCollision = false;
-		CollisionComponent* pCollB = SceneView::Get()->GetComponent<CollisionComponent>(entityB, "collision");
-		TransformComponent* pTransformB = SceneView::Get()->GetComponent<TransformComponent>(entityB, "transform");
+		CollisionComponent* pCollB = pScene->GetComponent<CollisionComponent>(entityB, "collision");
+		TransformComponent* pTransformB = pScene->GetComponent<TransformComponent>(entityB, "transform");
 		mat4 transformMatB = pTransformB->GetTransformNoRotation();
 
 		if (pCollA->Get_eShape() == eShape::AABB2D && pCollB->Get_eShape() == eShape::AABB2D)
@@ -344,7 +431,8 @@ void Physics::m_CheckCollisions(EntityID entityA, CollisionComponent* pCollA, Tr
 			sAABB2D* pAABB2D_B = pCollB->GetShape<sAABB2D>();
 
 			isCollision = AABBAABB2D_Test(pAABB2D_A, transformMatA, pAABB2D_B, transformMatB,
-				contactPointA, contactPointB, collisionNormalA, collisionNormalB);
+										  contactPointA, contactPointB, collisionNormalA, 
+										  collisionNormalB);
 		}
 		else if (pCollA->Get_eShape() == eShape::AABB && pCollB->Get_eShape() == eShape::AABB)
 		{
@@ -352,12 +440,26 @@ void Physics::m_CheckCollisions(EntityID entityA, CollisionComponent* pCollA, Tr
 			sAABB* pAABB_B = pCollB->GetShape<sAABB>();
 
 			isCollision = AABBAABB_Test(pAABB_A, transformMatA, pAABB_B, transformMatB,
-				contactPointA, contactPointB, collisionNormalA, collisionNormalB);
+										contactPointA, contactPointB, collisionNormalA, 
+										collisionNormalB);
+		}
+		else if (pCollA->Get_eShape() == eShape::SPHERE && pCollB->Get_eShape() == eShape::MESH_OF_TRIANGLES_INDIRECT)
+		{
+			sSphere* pSphere_A = pCollA->GetShape<sSphere>();
+			sMeshOfTriangles_Indirect* pMesh_B = pCollB->GetShape<sMeshOfTriangles_Indirect>();
+
+			ModelComponent* pModelB = pScene->GetComponent<ModelComponent>(entityB, "model");
+			sMesh* pMeshB = pModelB->GetCurrentMesh();
+
+			isCollision = SphereMeshTriangles_Test(pSphere_A, pTransformA->GetPosition(),
+												   pMeshB, transformMatB,
+												   contactPointA, contactPointB, 
+												   collisionNormalA, collisionNormalB);
 		}
 		else
 		{
 			// Collision test not implemented yet
-			isCollision = false;
+			continue;
 		}
 
 		if (!isCollision)
@@ -365,8 +467,8 @@ void Physics::m_CheckCollisions(EntityID entityA, CollisionComponent* pCollA, Tr
 			continue;
 		}
 
-		TagComponent* tagA = SceneView::Get()->GetComponent<TagComponent>(entityA, "tag");
-		TagComponent* tagB = SceneView::Get()->GetComponent<TagComponent>(entityB, "tag");
+		TagComponent* tagA = pScene->GetComponent<TagComponent>(entityA, "tag");
+		TagComponent* tagB = pScene->GetComponent<TagComponent>(entityB, "tag");
 
 		// Set all collision data needed for others to handle it
 		sCollisionData* pCollision = new sCollisionData();
@@ -424,8 +526,9 @@ void Physics::m_ResolveCollision(sCollisionData* pCollisionEvent, TransformCompo
 	// Recalculate velocity based on inverse mass
 	if (pCollisionEvent->bodyTypeA == eBodyType::DYNAMIC && pCollisionEvent->bodyTypeB == eBodyType::STATIC)
 	{
-		myutils::ResolveVelocity(velocityA, velocityB, pCollisionEvent->collisionNormalA, restitutionA,
-			inverseMassA, inverseMassB);
+		myutils::ResolveVelocity(velocityA, velocityB, 
+								 pCollisionEvent->collisionNormalA, restitutionA,
+								 inverseMassA, inverseMassB);
 
 		pForceA->SetVelocity(velocityA);
 		pTransformA->SetOldPosition(2);
@@ -433,14 +536,11 @@ void Physics::m_ResolveCollision(sCollisionData* pCollisionEvent, TransformCompo
 
 	if (pCollisionEvent->bodyTypeB == eBodyType::DYNAMIC && pCollisionEvent->bodyTypeA == eBodyType::STATIC)
 	{
-		myutils::ResolveVelocity(velocityB, velocityA, pCollisionEvent->collisionNormalB, restitutionB,
-			inverseMassB, inverseMassA);
+		myutils::ResolveVelocity(velocityB, velocityA, 
+								 pCollisionEvent->collisionNormalB, restitutionB,
+								 inverseMassB, inverseMassA);
 
 		pForceB->SetVelocity(velocityB);
 		pTransformB->SetOldPosition(2);
 	}
-}
-
-void Physics::m_DebugCollisions()
-{
 }

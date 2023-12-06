@@ -4,6 +4,7 @@
 #include "events/GLFWWrapper.h"
 #include "common/utils.h"
 #include "common/constants.h"
+#include <iostream>
 
 
 // TODO: All this should come from a config file
@@ -136,7 +137,7 @@ bool Engine::Initialize(const std::string& sceneName)
 		return false;
 	}
 
-	bool isDebugInit = m_pDebugSystem->Initialize(m_pShaderManager, baseModelPath);
+	bool isDebugInit = m_pDebugSystem->Initialize(m_pShaderManager, baseModelPath, m_pPhysics);
 	if (!isDebugInit)
 	{
 		CheckEngineError("Engine debug initialization");
@@ -160,38 +161,55 @@ void Engine::Run()
 
 	m_isRunning = true;
 
+	int frameCount = 0;
+	double elapsedTime = 0;
+
 	while (IsRunning())
 	{
-		double fixedDeltaTime = GetFixedDeltaTime();
-		
+		double deltaTime = GetDeltaTime();
+
+		// TODO: Interface with FPS
+		// DEBUG FPS
+		elapsedTime += deltaTime;
+		++frameCount;
+		if (elapsedTime >= 1.0) {
+			double fps = frameCount / elapsedTime;
+			std::cout << "FPS: " << fps << std::endl;
+
+			// Reset counters for the next second
+			frameCount = 0;
+			elapsedTime = 0;
+		}
+
 		m_pShaderManager->UseShaderProgram(shaderProgramName);
 
 		m_pWindowSystem->NewFrame(m_currShaderID);
 		m_pPhysics->NewFrame();
 
-		Update(fixedDeltaTime);
+		Update(deltaTime);
 
 		m_pWindowSystem->EndFrame();
 
 		m_pScene->ClearDeleted();
+
 	}
 }
 
-void Engine::Update(double fixedDeltaTime)
+void Engine::Update(double deltaTime)
 {
 	if (m_pEditor->IsRunning())
 	{
-		m_pEditor->Update(fixedDeltaTime);
+		m_pEditor->Update(deltaTime);
 	}
 	else
 	{
-		m_pScriptingSystem->Update(fixedDeltaTime);
-		m_pMediaPlayer->Update(fixedDeltaTime);
-		m_pPhysics->Update(fixedDeltaTime);
+		m_pScriptingSystem->Update(deltaTime);
+		m_pMediaPlayer->Update(deltaTime);
+		m_pPhysics->Update(deltaTime);
 	}
 	m_pWindowSystem->UpdateUL(m_currShaderID);
-	m_pRenderer->RenderScene(fixedDeltaTime);
-	m_pDebugSystem->Update(fixedDeltaTime, m_pRenderer->GetCamera()->GetViewMat(), m_pWindowSystem->GetProjection());
+	m_pRenderer->RenderScene(deltaTime);
+	m_pDebugSystem->Update(deltaTime, m_pRenderer->GetCamera()->GetViewMat(), m_pWindowSystem->GetProjection());
 }
 
 bool Engine::IsRunning()
@@ -208,19 +226,16 @@ bool Engine::IsRunning()
 	}
 }
 
-double Engine::GetFixedDeltaTime()
+double Engine::GetDeltaTime()
 {
 	double currentTime = glfwGetTime();
 	double deltaTime = currentTime - m_lastTime;
 	m_lastTime = currentTime;
 
-	// Debugging performance:
-	// printf("delta real: %.2f\n", deltaTime);
-
 	// Clamp delta time to the maximum frame time
-	if (deltaTime > FRAME_DURATION) {
-		deltaTime = FRAME_DURATION;
-	}
+	//if (deltaTime > FRAME_DURATION) {
+	//	deltaTime = FRAME_DURATION;
+	//}
 
 	// Add the frame time to the list
 	m_frameTimes.push_back(deltaTime);
@@ -420,6 +435,13 @@ bool Engine::LoadScene(std::string filePath)
 	if (!isLoaded)
 	{
 		Exit("Scripting system loading error\n\n");
+		return false;
+	}
+
+	isLoaded = m_pPhysics->LoadScene();
+	if (!isLoaded)
+	{
+		Exit("Physics system loading error\n\n");
 		return false;
 	}
 

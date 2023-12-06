@@ -68,6 +68,8 @@ void Editor::RedrawEntityUI()
 
 	printf("Toggle collision mode: C\n");
 	printf("Debug collision mode: %d\n", (int)pDebug->IsModesOn(eDebugMode::COLLISION));
+	printf("Toggle broadphase mode: B\n");
+	printf("Debug broadphase mode: %d\n", (int)pDebug->IsModesOn(eDebugMode::BROADPHASE));
 	// printf("Toggle normal mode: N\n");
 	// printf("Debug normal mode: %d\n\n", (int)pDebug->IsModesOn(eDebugMode::NORMAL));
 
@@ -172,7 +174,8 @@ void Editor::DrawSelectedEntity()
 		pDebug->AddRectangle(
 			minXYZ,
 			maxXYZ,
-			SELECTED_COLOR
+			SELECTED_COLOR,
+			false
 		);
 	}
 	else
@@ -392,6 +395,11 @@ bool Editor::KeyActions(sKeyInfo keyInfo)
 	if (keyInfo.pressedKey == GLFW_KEY_C && keyInfo.action == GLFW_PRESS)
 	{
 		pDebug->ToggleMode(eDebugMode::COLLISION);
+		return true;
+	}
+	if (keyInfo.pressedKey == GLFW_KEY_B && keyInfo.action == GLFW_PRESS)
+	{
+		pDebug->ToggleMode(eDebugMode::BROADPHASE);
 		return true;
 	}
 	//if (keyInfo.pressedKey == GLFW_KEY_N && keyInfo.action == GLFW_PRESS)

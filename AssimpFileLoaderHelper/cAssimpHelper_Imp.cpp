@@ -13,6 +13,7 @@
 #include <sstream>
 #include <float.h>
 #include <fstream>
+#include <glm/vec3.hpp>
 
 
 cFileLoader_Imp::cFileLoader_Imp()
@@ -137,10 +138,16 @@ bool cFileLoader_Imp::m_ProcessScene(const aiScene* scene, sMesh* drawInfo)
 			drawInfo->pIndices[indicesIndex] = v3;
 			indicesIndex += 1;
 
-			drawInfo->pTriangles[currTriangleIndex].pVertices = new sVertex[3];
-			drawInfo->pTriangles[currTriangleIndex].pVertices[0] = drawInfo->pVertices[v1];
-			drawInfo->pTriangles[currTriangleIndex].pVertices[1] = drawInfo->pVertices[v2];
-			drawInfo->pTriangles[currTriangleIndex].pVertices[2] = drawInfo->pVertices[v3];
+			// Load vertices positions into triangles
+			drawInfo->pTriangles[currTriangleIndex].vertices[0] = glm::vec3(drawInfo->pVertices[v1].x, 
+																			drawInfo->pVertices[v1].y, 
+																			drawInfo->pVertices[v1].z);
+			drawInfo->pTriangles[currTriangleIndex].vertices[1] = glm::vec3(drawInfo->pVertices[v2].x,
+																			drawInfo->pVertices[v2].y, 
+																			drawInfo->pVertices[v2].z);
+			drawInfo->pTriangles[currTriangleIndex].vertices[2] = glm::vec3(drawInfo->pVertices[v3].x,
+																			drawInfo->pVertices[v3].y, 
+																			drawInfo->pVertices[v3].z);
 		}
 	}
 	drawInfo->minX = minX;

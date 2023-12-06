@@ -33,6 +33,12 @@
         }
     },
     {
+        "collision": {
+            "shape": 6,
+            "bodyType": 0,
+            "meshName": "hogwarts.ply",
+            "isActive": true
+        },
         "model": {
             "models": [
                 "hogwarts.ply"
@@ -75,6 +81,12 @@
             "distance": 250.0,
             "height": 150.0,
             "offsetTarget": 275.0
+        },
+        "collision": {
+            "shape": 1,
+            "bodyType": 2,
+            "radius": 100.0,
+            "isActive": true
         },
         "force": {
             "inverseMass": 0.10000000149011612,
@@ -125,15 +137,15 @@
         },
         "transform": {
             "position": [
-                32243.16015625,
-                9482.9619140625,
-                6634.3037109375
+                35769.5078125,
+                15658.9013671875,
+                4680.4541015625
             ],
             "scale": 0.5,
             "orientation": [
-                -165.26766967773438,
-                75.81996154785156,
-                -167.7534942626953
+                178.91751098632813,
+                74.23713684082031,
+                -168.95809936523438
             ],
             "isActive": true
         }

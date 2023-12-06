@@ -32,7 +32,7 @@ public:
 
 	bool IsRunning();
 
-	double GetFixedDeltaTime();
+	double GetDeltaTime();
 
 	// Close app and destroy all
 	void Exit();

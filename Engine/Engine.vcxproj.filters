@@ -235,6 +235,12 @@
     <ClCompile Include="src\EngineScripting\commands\FollowMouse.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\EnginePhysics\cAABB.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EnginePhysics\BroadPhaseCollision.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\EngineRenderer\CameraSystem.h">
@@ -403,6 +409,8 @@
     <ClInclude Include="include\EngineScripting\commands\AccelerateTowards.h" />
     <ClInclude Include="include\events\InputProperties.h" />
     <ClInclude Include="include\EngineScripting\commands\FollowMouse.h" />
+    <ClInclude Include="include\EnginePhysics\BroadPhaseCollision.h" />
+    <ClInclude Include="include\EnginePhysics\cAABB.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\scene\SceneView.tpp">

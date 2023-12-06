@@ -14,36 +14,14 @@ struct sVertex
 
 struct sTriangleMesh
 {
-	sVertex* pVertices;
+	glm::vec3 vertices[3];
 
 	glm::vec3 GetNormal(void)
 	{
-		using namespace glm;
+		glm::vec3 v0_1 = vertices[1] - vertices[0];
+		glm::vec3 v0_2 = vertices[2] - vertices[1];
 
-		vec3 v1 = vec3(
-			this->pVertices[0].nx,
-			this->pVertices[0].ny,
-			this->pVertices[0].nz
-		);
-		vec3 v2 = vec3(
-			this->pVertices[1].nx,
-			this->pVertices[1].ny,
-			this->pVertices[1].nz
-		);
-		vec3 v3 = vec3(
-			this->pVertices[2].nx,
-			this->pVertices[2].ny,
-			this->pVertices[2].nz
-		);
-
-		vec3 averageNormal = normalize(v1 + v2 + v3);
-
-		return averageNormal;
-	}
-
-	~sTriangleMesh()
-	{
-		delete[] pVertices;
+		return glm::normalize(glm::cross(v0_1, v0_2));
 	}
 };
 
