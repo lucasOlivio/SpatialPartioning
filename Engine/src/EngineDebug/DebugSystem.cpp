@@ -108,6 +108,12 @@ void DebugSystem::ResetDebugObjects()
         delete pRect;
     }
     m_vecRectanglesToDraw.clear();
+
+    for (sDebugTriangle* pTri : m_vecTrianglesToDraw)
+    {
+        delete pTri;
+    }
+    m_vecTrianglesToDraw.clear();
 }
 
 void DebugSystem::AddLine(glm::vec3 startXYZ, glm::vec3 endXYZ, glm::vec4 RGBA)
@@ -187,6 +193,19 @@ void DebugSystem::AddRectangle(glm::vec3 minXYZ, glm::vec3 maxXYZ, glm::vec4 RGB
     }
 }
 
+void DebugSystem::AddTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, glm::vec4 RGBA)
+{
+    sDebugTriangle* debugTriangle = new sDebugTriangle();
+
+    debugTriangle->color = RGBA;
+
+    debugTriangle->v1 = v1;
+    debugTriangle->v2 = v2;
+    debugTriangle->v3 = v3;
+
+    m_vecTrianglesToDraw.push_back(debugTriangle);
+}
+
 void DebugSystem::AddSphere(glm::vec3 position, float radius, glm::vec4 color)
 {
     // For now we only deal with 1 debug sphere and update its position and scale at render time
@@ -228,6 +247,7 @@ void DebugSystem::Update(double deltaTime, glm::mat4 matView, glm::mat4 matProje
     m_DrawLines();
     m_DrawSpheres();
     m_DrawRectangles();
+    m_DrawTriangles();
 
     ResetDebugObjects();
 
@@ -429,12 +449,10 @@ void DebugSystem::m_DrawSpheres()
 
 void DebugSystem::m_DrawRectangles()
 {
-    using namespace std;
     using namespace glm;
-    using namespace myutils;
 
     mat4 matModel(1.0f);
-    glm::mat4 matModelIT = glm::inverse(glm::transpose(matModel));
+    mat4 matModelIT = inverse(transpose(matModel));
 
     for (sDebugRectangle* pRect : m_vecRectanglesToDraw)
     {
@@ -492,6 +510,36 @@ void DebugSystem::m_DrawARectangle(glm::mat4 matModel, glm::mat4 matModelIT, sDe
     glVertex3f(pRect->vt3.x, pRect->vt3.y, pRect->vt3.z);
     glVertex3f(pRect->vb3.x, pRect->vb3.y, pRect->vb3.z);
     glVertex3f(pRect->vb4.x, pRect->vb4.y, pRect->vb4.z);
+
+    glEnd();
+}
+
+void DebugSystem::m_DrawTriangles()
+{
+    using namespace glm;
+
+    mat4 matModel(1.0f);
+    mat4 matModelIT = inverse(transpose(matModel));
+
+    for (sDebugTriangle* pTri : m_vecTrianglesToDraw)
+    {
+        m_DrawATriangle(matModel, matModelIT, pTri);
+    }
+}
+
+void DebugSystem::m_DrawATriangle(glm::mat4 matModel, glm::mat4 matModelIT, sDebugTriangle* pTri)
+{
+    m_pShaderProgram->SetUniformMatrix4f("matModel", matModel);
+    m_pShaderProgram->SetUniformMatrix4f("matModel_IT", matModelIT);
+
+    m_pShaderProgram->SetUniformFloat("useDebugColor", true);
+    m_pShaderProgram->SetUniformVec4("debugColour", pTri->color);
+
+    glBegin(GL_TRIANGLES);
+
+    glVertex3f(pTri->v1.x, pTri->v1.y, pTri->v1.z);
+    glVertex3f(pTri->v2.x, pTri->v2.y, pTri->v2.z);
+    glVertex3f(pTri->v3.x, pTri->v3.y, pTri->v3.z);
 
     glEnd();
 }

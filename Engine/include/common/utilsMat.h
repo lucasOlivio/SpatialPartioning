@@ -60,6 +60,9 @@ namespace myutils
     // Impulse calculation for collision with a static object
     void ResolveVelocity(glm::vec3& velocity, glm::vec3 reflectionNormal, float inverseMass);
 
+    // Vector direction change projected by normal
+    void CalculateProjectedDirection(glm::vec3 oppositeNormal, glm::vec3& directionOut);
+
     // Calculate sin wave based on time
     float CalculateSinWave(float currentTime, float amplitude, float frequency, float phaseOffset);
 

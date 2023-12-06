@@ -70,6 +70,8 @@ void Editor::RedrawEntityUI()
 	printf("Debug collision mode: %d\n", (int)pDebug->IsModesOn(eDebugMode::COLLISION));
 	printf("Toggle broadphase mode: B\n");
 	printf("Debug broadphase mode: %d\n", (int)pDebug->IsModesOn(eDebugMode::BROADPHASE));
+	printf("Toggle broadphase triangles mode: T\n");
+	printf("Debug broadphase triangles mode: %d\n", (int)pDebug->IsModesOn(eDebugMode::BROADPHASE_TRIANGLES));
 	// printf("Toggle normal mode: N\n");
 	// printf("Debug normal mode: %d\n\n", (int)pDebug->IsModesOn(eDebugMode::NORMAL));
 
@@ -400,6 +402,11 @@ bool Editor::KeyActions(sKeyInfo keyInfo)
 	if (keyInfo.pressedKey == GLFW_KEY_B && keyInfo.action == GLFW_PRESS)
 	{
 		pDebug->ToggleMode(eDebugMode::BROADPHASE);
+		return true;
+	}
+	if (keyInfo.pressedKey == GLFW_KEY_T && keyInfo.action == GLFW_PRESS)
+	{
+		pDebug->ToggleMode(eDebugMode::BROADPHASE_TRIANGLES);
 		return true;
 	}
 	//if (keyInfo.pressedKey == GLFW_KEY_N && keyInfo.action == GLFW_PRESS)

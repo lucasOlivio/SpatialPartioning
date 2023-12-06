@@ -281,6 +281,24 @@ namespace myutils
         velocity = reflectionNormal * newSpeed;
     }
 
+    void CalculateProjectedDirection(glm::vec3 oppositeNormal, glm::vec3& directionOut)
+    {
+        using namespace glm;
+
+        float maxSpeed = length(directionOut);
+        // Project direction onto the plane defined by the normal
+        vec3 velProj = dot(directionOut, oppositeNormal) * oppositeNormal;
+
+        // Remove the component of direction in the direction of the ground
+        directionOut -= velProj;
+
+        // clamp the direction magnitude to prevent it from increasing
+        float currentSpeed = glm::length(directionOut);
+        if (currentSpeed > maxSpeed) {
+            directionOut = normalize(directionOut) * maxSpeed;
+        }
+    }
+
     float CalculateSinWave(float currentTime, float amplitude, float frequency, float offset) {
         // Calculate the sine value
         float sineValue = (float)(amplitude * sin(2 * PI * frequency * currentTime));
