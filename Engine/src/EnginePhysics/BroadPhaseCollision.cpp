@@ -8,7 +8,7 @@
 BroadPhaseCollision::BroadPhaseCollision()
 {
 	// TODO: For non-static grid aabbs this should be dynamic, comming from component size or map
-	m_lengthPerBox = glm::vec3(10, 10, 10);
+	m_lengthPerBox = glm::vec3(5, 5, 5);
 }
 
 BroadPhaseCollision::~BroadPhaseCollision()

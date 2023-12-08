@@ -5,8 +5,8 @@ local inputkeys    = require("assets.scripts.common.inputkeys")
 local inputactions = require("assets.scripts.common.inputactions")
 
 tbGlobals = {
-    maxSpeed     = 7.5,
-    acceleration = 2,
+    maxSpeed     = 4,
+    acceleration = 4,
     sensitivity  = 0.007,
     accUUID      = 0
 }

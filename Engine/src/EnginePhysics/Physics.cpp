@@ -50,22 +50,6 @@ void Physics::Update(double deltaTime)
 
 	SceneView* pScene = SceneView::Get();
 
-	// Change position based on the acceleration and velocity
-	for (pScene->First("force"); !pScene->IsDone(); pScene->Next())
-	{
-		EntityID entityID = pScene->CurrentKey();
-		ForceComponent* pForce = pScene->CurrentValue<ForceComponent>();
-
-		if (!pForce->IsActive())
-		{
-			continue;
-		}
-
-		TransformComponent* pTransform = pScene->GetComponent<TransformComponent>(entityID, "transform");
-
-		m_ApplyForce(pForce, pTransform, deltaTime);
-	}
-
 	// Check all non-static entities for collision
 	m_CheckCollisions();
 
@@ -109,6 +93,22 @@ void Physics::Update(double deltaTime)
 
 	// Trigger collision event for objects that collided
 	m_pCollisionEvent->TriggerCollisions(m_vecCollided);
+
+	// Change position based on the acceleration and velocity
+	for (pScene->First("force"); !pScene->IsDone(); pScene->Next())
+	{
+		EntityID entityID = pScene->CurrentKey();
+		ForceComponent* pForce = pScene->CurrentValue<ForceComponent>();
+
+		if (!pForce->IsActive())
+		{
+			continue;
+		}
+
+		TransformComponent* pTransform = pScene->GetComponent<TransformComponent>(entityID, "transform");
+
+		m_ApplyForce(pForce, pTransform, deltaTime);
+	}
 }
 
 bool Physics::IsRunning()
@@ -428,11 +428,9 @@ void Physics::m_CreateOrAddCollision(EntityID entityId, EntityID entityCollided,
 	if (it == m_mapCollisions.end())
 	{
 		pColl = new sCollisions();
-		pColl->mergedNormal = normal;
+		pColl->mergedNormal = glm::vec3(0);
 
 		m_mapCollisions[entityId] = pColl;
-
-		printf("\n\n-----------------");
 	}
 	else
 	{
@@ -449,9 +447,13 @@ void Physics::m_CreateOrAddCollision(EntityID entityId, EntityID entityCollided,
 	}
 
 	// Get addition of vectors
-	printf("\n\nnormal: %.2f %.2f %.2f \n", normal.x, normal.y, normal.z);
-	pColl->mergedNormal = normalize((pColl->mergedNormal + normal));
-	printf("merged normal: %.2f %.2f %.2f \n", pColl->mergedNormal.x, pColl->mergedNormal.y, pColl->mergedNormal.z);
+	glm::vec3 summed = (pColl->mergedNormal + normal);
+	// When getting normal of 0 glm set to NaN
+	if (summed != glm::vec3(0))
+	{
+		summed = normalize(summed);
+	}
+	pColl->mergedNormal = summed;
 }
 
 void Physics::m_ApplyForce(ForceComponent* pForce, TransformComponent* pTransform, double deltaTime)
@@ -806,7 +808,7 @@ void Physics::m_ResolveCollision(sCollisionData* pCollisionEvent,
 	}
 
 	DebugSystem* pDebug = DebugSystem::Get();
-	pDebug->AddSphere(pCollisionEvent->contactPointA, 0.1f, RED);
+	pDebug->AddSphere(pCollisionEvent->contactPointA, 0.05f, RED);
 
 	// Velocity and acceleration 0 in collision normal direction
 	//if (pCollisionEvent->bodyTypeA == eBodyType::DYNAMIC &&
@@ -851,11 +853,6 @@ void Physics::m_ResolveCollision(sCollisionData* pCollisionEvent,
 	{
 		contactNormal = it->second->mergedNormal;
 	}
-
-	myutils::ResolveVelocity(accelerationA, accelerationB, contactNormal,
-		pForceA->GetRestitution(), pForceA->GetInverseMass(), 0.0f);
-
-	pForceA->SetAcceleration(accelerationA);
 
 	myutils::ResolveVelocity(velocityA, velocityB, contactNormal,
 		pForceA->GetRestitution(), pForceA->GetInverseMass(), 0.0f);
