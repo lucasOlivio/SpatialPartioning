@@ -12,11 +12,6 @@ namespace myutils
     void ApplyTransformInModelMat(iComponent* pTransform, glm::mat4& matModelOut);
     void ApplyTransformInModelMat(glm::vec3 position, glm::vec3 quaternions, float scale, glm::mat4& matModelOut);
 
-    double distance(const glm::vec3& p1, const glm::vec3& p2);
-
-    // Function to determine if a point is inside the circumcircle of a triangle
-    bool IsInsideCircumcircle(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, const glm::vec3& testPoint);
-
     // From: Real-Time Collision Detection- Ericson, Christer- 9781558607323- Books - Amazon.ca
     // Chapter 5:
     glm::vec3 ClosestPtPointTriangle(glm::vec3 p, glm::vec3 a, glm::vec3 b, glm::vec3 c);

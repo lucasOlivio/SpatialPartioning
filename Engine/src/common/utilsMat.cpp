@@ -58,32 +58,6 @@ namespace myutils
         return;
     }
 
-    double distance(const glm::vec3& p1, const glm::vec3& p2)
-    {
-        return std::hypot(p1.x - p2.x, p1.y - p2.y);
-    }
-
-    // Function to determine if a point is inside the circumcircle of a triangle
-    bool IsInsideCircumcircle(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, const glm::vec3& testPoint)
-    {
-        // Calculate the distances between the three points that form the triangle
-        double d12 = distance(p1, p2);
-        double d23 = distance(p2, p3);
-        double d31 = distance(p3, p1);
-
-        // Calculate the determinant of a matrix formed by the triangle's coordinates
-        double determinant = p1.x * (p2.y - p3.y) - p2.x * (p1.y - p3.y) + p3.x * (p1.y - p2.y);
-
-        // Calculate the radius of the circumcircle
-        double radius = (d12 * d23 * d31) / (4.0 * std::abs(determinant));
-
-        // Calculate the distance between the test point and the first point of the triangle
-        double distToTestPoint = distance(testPoint, p1);
-
-        // Check if the distance to the test point is less than or equal to the circumcircle radius
-        return distToTestPoint <= radius;
-    }
-
     // From: Real-Time Collision Detection- Ericson, Christer- 9781558607323- Books - Amazon.ca
     // Chapter 5:
     glm::vec3 ClosestPtPointTriangle(glm::vec3 p, glm::vec3 a, glm::vec3 b, glm::vec3 c)

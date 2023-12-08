@@ -31,24 +31,29 @@ public:
 	// Returns the collision points for each body
 
 	bool AABBAABB_Test(sAABB* aabbA, glm::mat4 matTransfA,
-					   sAABB* aabbB, glm::mat4 matTransfB,
-					   glm::vec3& contactPointA, glm::vec3& contactPointB,
-					   glm::vec3& collisionNormalA, glm::vec3& collisionNormalB);
+		sAABB* aabbB, glm::mat4 matTransfB,
+		glm::vec3& contactPointA, glm::vec3& contactPointB,
+		glm::vec3& collisionNormalA, glm::vec3& collisionNormalB);
 
 	bool AABBAABB2D_Test(sAABB2D* aabb2dA, glm::mat4 matTransfA,
-						 sAABB2D* aabb2dB, glm::mat4 matTransfB,
-						 glm::vec3& contactPointA, glm::vec3& contactPointB,
-						 glm::vec3& collisionNormalA, glm::vec3& collisionNormalB);
+		sAABB2D* aabb2dB, glm::mat4 matTransfB,
+		glm::vec3& contactPointA, glm::vec3& contactPointB,
+		glm::vec3& collisionNormalA, glm::vec3& collisionNormalB);
 
 	bool SphereMeshTriangles_Test(sSphere* sphereA, glm::vec3 sphereAPosition,
-								  sMesh* meshB, glm::mat4 matTransfB,
-								  glm::vec3& contactPointA, glm::vec3& contactPointB,
-								  glm::vec3& collisionNormalA, glm::vec3& collisionNormalB);
+		sMesh* meshB, glm::mat4 matTransfB,
+		glm::vec3& contactPointA, glm::vec3& contactPointB,
+		glm::vec3& collisionNormalA, glm::vec3& collisionNormalB);
 
 	bool SphereTriangle_Test(sSphere* sphereA, glm::vec3 sphereAPosition,
-							 sTriangle triangle,
-							 glm::vec3& contactPointA, glm::vec3& contactPointB,
-							 glm::vec3& collisionNormalA, glm::vec3& collisionNormalB);
+		sTriangle triangle,
+		glm::vec3& contactPointA, glm::vec3& contactPointB,
+		glm::vec3& collisionNormalA, glm::vec3& collisionNormalB);
+
+	bool SphereSphere_Test(sSphere* pSphereA, glm::vec3 sphereAPosition,
+		sSphere* pSphereB, glm::vec3 sphereBPosition,
+		glm::vec3& contactPointA, glm::vec3& contactPointB,
+		glm::vec3& collisionNormalA, glm::vec3& collisionNormalB);
 private:
 	bool m_isRunning;
 
@@ -71,16 +76,16 @@ private:
 
 	// Check which aabbs contains the entity and returns the triangles in it to be tested
 	void m_CheckBroadPhaseCollision(uint idxaabb,
-									std::vector<sTriangle>& vecTrianglesOut);
+		std::vector<sTriangle>& vecTrianglesOut);
 
 	// Given the limited objects, now we can compare in more details the collision
-	void m_CheckNarrowPhaseCollision(EntityID entityA, 
-									 std::vector<sTriangle>& vecTrianglesIn);
+	void m_CheckNarrowPhaseCollision(EntityID entityA,
+		std::vector<sTriangle>& vecTrianglesIn);
 
 	// Given the collision, calculates the new positions and velocities
-	void m_ResolveCollision(sCollisionData* pCollisionEvent, 
-							TransformComponent* pTransformA, TransformComponent* pTransformB, 
-							ForceComponent* pForceA, ForceComponent* pForceB);
+	void m_ResolveCollision(sCollisionData* pCollisionEvent,
+		TransformComponent* pTransformA, TransformComponent* pTransformB,
+		ForceComponent* pForceA, ForceComponent* pForceB);
 
 	// TODO: Temporarily to debug broadphase creation
 	friend class DebugSystem;

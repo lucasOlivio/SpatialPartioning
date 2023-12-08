@@ -266,7 +266,7 @@ glm::vec3 myutils::IncreaseVelocity(glm::vec3 initialVelocity, glm::vec3 acceler
 {
     glm::vec3 newVelocity = (acceleration * deltaTime) + initialVelocity;
 
-    if (glm::length(newVelocity) < 0.1)
+    if (glm::length(newVelocity) < 0.01)
     {
         return glm::vec3(0);
     }

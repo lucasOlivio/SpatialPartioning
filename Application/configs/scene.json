@@ -23,7 +23,7 @@
                 0.0,
                 0.0
             ],
-            "scale": 50000.0,
+            "scale": 1000.0,
             "orientation": [
                 0.0,
                 -0.0,
@@ -36,15 +36,15 @@
         "collision": {
             "shape": 6,
             "bodyType": 0,
-            "meshName": "hogwarts.ply",
+            "meshName": "trenchds.ply",
             "isActive": true
         },
         "model": {
             "models": [
-                "hogwarts.ply"
+                "trenchds.ply"
             ],
             "collisionName": "",
-            "material": "mathogwarts",
+            "material": "matdirtymetal",
             "friendlyName": "",
             "parentTagName": "",
             "isWireframe": false,
@@ -53,7 +53,7 @@
             "isActive": true
         },
         "tag": {
-            "name": "hogwarts",
+            "name": "trenchds",
             "isActive": true
         },
         "transform": {
@@ -62,7 +62,7 @@
                 0.0,
                 0.0
             ],
-            "scale": 0.5,
+            "scale": 1.0,
             "orientation": [
                 0.0,
                 -0.0,
@@ -78,20 +78,20 @@
                 1.0,
                 0.0
             ],
-            "distance": 250.0,
-            "height": 150.0,
-            "offsetTarget": 275.0
+            "distance": 3.0,
+            "height": 2.0,
+            "offsetTarget": 2.0
         },
         "collision": {
             "shape": 1,
             "bodyType": 2,
-            "radius": 66.0,
+            "radius": 0.4000000059604645,
             "isActive": true
         },
         "force": {
             "inverseMass": 0.10000000149011612,
             "restitution": 0.800000011920929,
-            "drag": 500.0,
+            "drag": 0.10000000149011612,
             "acceleration": [
                 0.0,
                 0.0,
@@ -116,10 +116,10 @@
         },
         "model": {
             "models": [
-                "car.ply"
+                "darthship.ply"
             ],
             "collisionName": "",
-            "material": "matcar",
+            "material": "matdarthship",
             "friendlyName": "",
             "parentTagName": "",
             "isWireframe": false,
@@ -128,7 +128,7 @@
             "isActive": true
         },
         "script": {
-            "scriptName": "car.lua",
+            "scriptName": "darthship.lua",
             "isActive": true
         },
         "tag": {
@@ -137,29 +137,29 @@
         },
         "transform": {
             "position": [
-                35486.0390625,
-                15547.232421875,
-                5257.28662109375
+                9.1628999710083,
+                42.39793014526367,
+                19.19658088684082
             ],
-            "scale": 0.5,
+            "scale": 1.0,
             "orientation": [
-                140.15016174316406,
-                63.129730224609375,
-                -173.38917541503906
+                -6.4283599853515625,
+                -84.22911834716797,
+                -31.101499557495117
             ],
             "isActive": true
         }
     },
     {
         "material": {
-            "materialName": "matcar",
+            "materialName": "matdarthship",
             "offsetMove": [
                 0.0,
                 0.0,
                 0.0
             ],
             "colorTextures": [
-                "textcar"
+                "textdarthship"
             ],
             "colorTexturesRatios": [
                 1.0,
@@ -181,17 +181,17 @@
             "isActive": true
         },
         "tag": {
-            "name": "matcar",
+            "name": "matdarthship",
             "isActive": true
         }
     },
     {
         "tag": {
-            "name": "texthogwarts",
+            "name": "textdirtymetal",
             "isActive": true
         },
         "texture": {
-            "fileName": "hogwarts.bmp",
+            "fileName": "dirtymetal.bmp",
             "textureType": 0,
             "vecTextures": [],
             "isActive": true
@@ -199,11 +199,11 @@
     },
     {
         "tag": {
-            "name": "textcar",
+            "name": "textdarthship",
             "isActive": true
         },
         "texture": {
-            "fileName": "car_basecolor.bmp",
+            "fileName": "darthship.bmp",
             "textureType": 0,
             "vecTextures": [],
             "isActive": true
@@ -211,14 +211,14 @@
     },
     {
         "material": {
-            "materialName": "mathogwarts",
+            "materialName": "matdirtymetal",
             "offsetMove": [
                 0.0,
                 0.0,
                 0.0
             ],
             "colorTextures": [
-                "texthogwarts"
+                "textdirtymetal"
             ],
             "colorTexturesRatios": [
                 1.0,
@@ -240,7 +240,7 @@
             "isActive": false
         },
         "tag": {
-            "name": "mathogwarts",
+            "name": "matdirtymetal",
             "isActive": false
         },
         "transform": {
@@ -314,12 +314,12 @@
             "fileName": "textcube",
             "textureType": 20,
             "vecTextures": [
-                "cubetexture/TropicalSunnyDayLeft2048.bmp",
-                "cubetexture/TropicalSunnyDayRight2048.bmp",
-                "cubetexture/TropicalSunnyDayUp2048.bmp",
-                "cubetexture/TropicalSunnyDayDown2048.bmp",
-                "cubetexture/TropicalSunnyDayFront2048.bmp",
-                "cubetexture/TropicalSunnyDayBack2048.bmp"
+                "cubetexture/SpaceBox_left2_negX.bmp",
+                "cubetexture/SpaceBox_right1_posX.bmp",
+                "cubetexture/SpaceBox_top3_posY.bmp",
+                "cubetexture/SpaceBox_bottom4_negY.bmp",
+                "cubetexture/SpaceBox_front5_posZ.bmp",
+                "cubetexture/SpaceBox_back6_negZ.bmp"
             ],
             "isActive": false
         },
