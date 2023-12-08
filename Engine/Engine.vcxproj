@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
+    <ClCompile Include="src\EnginePhysics\collisionTests.cpp" />
     <ClCompile Include="src\EnginePhysics\BroadPhaseCollision.cpp" />
     <ClCompile Include="src\EnginePhysics\cAABB.cpp" />
     <ClCompile Include="src\EngineScripting\commands\FollowMouse.cpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="include\common\openglerrors.h" />
     <ClInclude Include="include\EnginePhysics\cAABB.h" />
     <ClInclude Include="include\EnginePhysics\BroadPhaseCollision.h" />
+    <ClInclude Include="include\EnginePhysics\collisionTests.h" />
     <ClInclude Include="include\EngineRenderer\TextureProperties.h" />
     <ClInclude Include="include\common\types.h" />
     <ClInclude Include="include\common\utils.h" />

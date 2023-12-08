@@ -51,6 +51,7 @@ void BroadPhaseCollision::ClearAABBs()
 	}
 
 	m_mapAABBs.clear();
+	m_mapActiveAABBs.clear();
 }
 
 uint BroadPhaseCollision::LocatePoint(glm::vec3 point)

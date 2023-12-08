@@ -6,7 +6,7 @@ local inputactions = require("assets.scripts.common.inputactions")
 
 tbGlobals = {
     maxSpeed     = 7.5,
-    acceleration = 5,
+    acceleration = 2,
     sensitivity  = 0.007,
     accUUID      = 0
 }

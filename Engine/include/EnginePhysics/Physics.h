@@ -66,6 +66,11 @@ private:
 
 	// Collisions that happenned in the frame
 	std::vector<sCollisionData*> m_vecCollided;
+	std::map<EntityID, sCollisions*> m_mapCollisions;
+
+	// Merge to alread existing collision for entity or create new collision for entity in vector
+	void m_CreateOrAddCollision(EntityID entityId, EntityID entityCollided, 
+								sTriangle triangle, glm::vec3 normal);
 
 	// Update object transform based on velocity and acceleration
 	void m_ApplyForce(ForceComponent* pForce, TransformComponent* pTransform, double deltaTime);
@@ -73,6 +78,9 @@ private:
 	// Check every object in scene for collision between the collisionShapes
 	// Add collision to map cache and send collision events
 	void m_CheckCollisions();
+
+	// Get entity back to point of no collision
+	void m_RepositionCollision();
 
 	// Check which aabbs contains the entity and returns the triangles in it to be tested
 	void m_CheckBroadPhaseCollision(uint idxaabb,
