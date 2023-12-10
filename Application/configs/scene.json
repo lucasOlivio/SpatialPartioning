@@ -89,8 +89,8 @@
             "isActive": true
         },
         "force": {
-            "inverseMass": 0.004999999888241291,
-            "restitution": 0.30000001192092896,
+            "inverseMass": 0.0010000000474974513,
+            "restitution": 0.25,
             "drag": 0.5,
             "acceleration": [
                 0.0,
@@ -137,15 +137,15 @@
         },
         "transform": {
             "position": [
-                12.142339706420898,
-                8.866239547729492,
-                14.459449768066406
+                13.975379943847656,
+                8.330550193786621,
+                14.47544002532959
             ],
             "scale": 1.0,
             "orientation": [
-                61.5288200378418,
-                -86.99585723876953,
-                -83.6405029296875
+                58.34806823730469,
+                -86.6078872680664,
+                -61.72856903076172
             ],
             "isActive": true
         }
@@ -480,6 +480,49 @@
                 -0.0,
                 -0.0,
                 -0.0
+            ],
+            "isActive": true
+        }
+    },
+    {
+        "camera": {
+            "upVector": [
+                0.0,
+                1.0,
+                0.0
+            ],
+            "distance": 3.0,
+            "height": 2.0,
+            "offsetTarget": 2.0
+        },
+        "model": {
+            "models": [
+                "darthship_destroied.ply"
+            ],
+            "collisionName": "",
+            "material": "matdarthship",
+            "friendlyName": "",
+            "parentTagName": "",
+            "isWireframe": false,
+            "doNotLight": false,
+            "useColorTexture": true,
+            "isActive": false
+        },
+        "tag": {
+            "name": "darthship_destroied",
+            "isActive": true
+        },
+        "transform": {
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 1.0,
+            "orientation": [
+                0.0,
+                -0.0,
+                0.0
             ],
             "isActive": true
         }

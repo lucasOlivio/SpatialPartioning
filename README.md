@@ -1,8 +1,8 @@
-# Lua scripting
+# Spatial partioning
 
 ## About
 
-Project 2 for "Game frameworks" class. Integrating lua to the engine to create gameplay scripting and to execute animations.
+Project 2 for "Physics" class. Creation of hierarchical AABBs to handle collision of complex and big meshes;
 
 ## Requirements
 
@@ -19,5 +19,5 @@ Project 2 for "Game frameworks" class. Integrating lua to the engine to create g
 ## How to play
 
 - Press P to start playing
-- A/W/S/D to move
+- W/S to move forward and backward
 - Mouse to control the camera

@@ -22,9 +22,9 @@ int lua_GetFrontDirection(lua_State* L)
 
 int lua_GetTransform(lua_State* L)
 {
-	std::string entityTag = lua_tostring(L, 1);
+	EntityID entityid = lua_tonumber(L, 1);
 
-	TransformComponent* pTransform = SceneView::Get()->GetComponentByTag<TransformComponent>(entityTag, "transform");
+	TransformComponent* pTransform = SceneView::Get()->GetComponent<TransformComponent>(entityid, "transform");
 
 	glm::vec3 position = pTransform->GetPosition();
 	glm::vec3 orientation = pTransform->GetOrientation();

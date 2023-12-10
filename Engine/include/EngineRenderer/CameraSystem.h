@@ -17,6 +17,9 @@ public:
 
 	glm::vec3 GetCameraPosition();
 
+	// Change the active camera in the scene
+	void ChangeCamera(CameraComponent* pCamera, TransformComponent* pTransform);
+
 private:
 
 	CameraComponent* m_pCamera;

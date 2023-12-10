@@ -854,20 +854,21 @@ void Physics::m_ResolveCollision(sCollisionData* pCollisionEvent,
 		contactNormal = it->second->mergedNormal;
 	}
 
-	myutils::ResolveVelocity(velocityA, velocityB, contactNormal,
-		pForceA->GetRestitution(), pForceA->GetInverseMass(), 0.0f);
-
-	pForceA->SetVelocity(velocityA);
-
 	if (pCollisionEvent->bodyTypeA == eBodyType::DYNAMIC && pForceA)
 	{
-		pForceA->SetAcceleration(accelerationA);
+		myutils::ResolveVelocity(velocityA, velocityB, contactNormal,
+			pForceA->GetRestitution(), pForceA->GetInverseMass(), 0.0f);
+
+		pForceA->SetAcceleration(glm::vec3(0));
 		pForceA->SetVelocity(velocityA);
 	}
 
 	if (pCollisionEvent->bodyTypeB == eBodyType::DYNAMIC && pForceB)
 	{
-		pForceB->SetAcceleration(accelerationA);
-		pForceB->SetVelocity(velocityA);
+		myutils::ResolveVelocity(velocityB, velocityA, contactNormal,
+			pForceB->GetRestitution(), pForceB->GetInverseMass(), 0.0f);
+
+		pForceB->SetAcceleration(glm::vec3(0));
+		pForceB->SetVelocity(velocityB);
 	}
 }

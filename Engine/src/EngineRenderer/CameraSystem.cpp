@@ -55,3 +55,9 @@ glm::vec3 CameraSystem::GetCameraPosition()
     return camFinalPos;
 }
 
+void CameraSystem::ChangeCamera(CameraComponent* pCamera, TransformComponent* pTransform)
+{
+    m_pCamera = pCamera;
+    m_pTransform = pTransform;
+}
+

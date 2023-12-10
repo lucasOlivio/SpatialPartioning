@@ -3,6 +3,7 @@
 #include "components/Transform.h"
 #include "scene/Scene.h"
 #include "scene/SceneView.h"
+#include "Engine.h"
 
 CreateEntity::CreateEntity()
 {
@@ -36,14 +37,23 @@ bool CreateEntity::Initialize(rapidjson::Value& document)
 
 bool CreateEntity::Update(double deltaTime)
 {
+    SceneView* pScene = SceneView::Get();
+
     // Create the entity
     EntityID newEntity = Scene::Get()->CreateEntity(m_entityID);
 
     // Set transform parameters
-    TransformComponent* pTransform = SceneView::Get()->GetComponent<TransformComponent>(newEntity, "transform");
+    TransformComponent* pTransform = pScene->GetComponent<TransformComponent>(newEntity, "transform");
 
     pTransform->SetPosition(m_position);
     pTransform->SetOrientation(m_orientation);
+
+    iComponent* pComp = pScene->GetComponent(newEntity, "camera");
+    if (pComp)
+    {
+        // new component have camera then we update the active camera
+        Engine::Get()->ChangeCamera((CameraComponent*)pComp, pTransform);
+    }
 
     return true;
 }

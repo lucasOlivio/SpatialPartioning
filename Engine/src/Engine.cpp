@@ -364,6 +364,11 @@ void Engine::ChangeMode()
 	return;
 }
 
+void Engine::ChangeCamera(CameraComponent* pCamera, TransformComponent* pTransform)
+{
+	m_pRenderer->GetCamera()->ChangeCamera(pCamera, pTransform);
+}
+
 void Engine::SaveScene(std::string filePath)
 {
 	iConfigReadWrite* pConfigrw = ConfigReadWriteFactory::CreateConfigReadWrite(filePath);

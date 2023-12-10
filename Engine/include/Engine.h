@@ -51,6 +51,9 @@ public:
 	// Change between edit mode and play mode
 	virtual void ChangeMode();
 
+	// Change camera active in the scene
+	void ChangeCamera(CameraComponent* pCamera, TransformComponent* pTransform);
+
 	// Save all components data to file
 	virtual void SaveScene(std::string filePath);
 	virtual void SaveScene();

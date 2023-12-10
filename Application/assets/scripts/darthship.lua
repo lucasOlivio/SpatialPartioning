@@ -1,5 +1,6 @@
 local accelerate   = require("assets.scripts.gameplay.accelerate")
 local followmouse   = require("assets.scripts.gameplay.followmouse")
+local destroyship   = require("assets.scripts.gameplay.destroyship")
 local directions   = require("assets.scripts.common.directions")
 local inputkeys    = require("assets.scripts.common.inputkeys")
 local inputactions = require("assets.scripts.common.inputactions")
@@ -42,3 +43,8 @@ function onkeyinput(pressedkey, action, mods, scancode)
         end
     end
 end
+
+function oncollision(tagCollided)
+    destroyship.DestroyShip(entity)
+end
+
